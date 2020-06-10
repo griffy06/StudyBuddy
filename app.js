@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 const passport = require('passport');
 const config = require('./config/database');
 
-mongoose.connect(config.database);
+mongoose.connect(config.database,{ useNewUrlParser: true , useUnifiedTopology: true });
 var db = mongoose.connection;
 
 //check connection
@@ -47,6 +47,7 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/main', mainRouter);
+app.use('/main/:id',mainRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

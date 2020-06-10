@@ -5,53 +5,185 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
     <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.css' />
     <title>index</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function Star(x, y, s) {
+            this.x = x;
+            this.y = y;
+            this.s = s; // size
+            this.vx = 0; // velocity x
+            this.vy = 0; // velocity y
+            this.a = Math.random(); // alpha
+            // drawing the stars and setting the fillstyle is expensive
+            // only do it once per star and cache it.
+            this.img = document.createElement('canvas');
+            var context = this.img.getContext('2d');
+            this.img.height = this.img.width = this.s;
+            var grad = context.createRadialGradient(this.s / 2, this.s / 2, 1, this.s / 2, this.s / 2, this.s / 2);
+            grad.addColorStop(0, 'rgba(255,255,255,.8)');
+            grad.addColorStop(1, 'rgba(255,255,255,0)');
+
+            context.beginPath();
+            context.fillStyle = grad;
+            context.arc(this.s / 2, this.s / 2, this.s, 0, Math.PI * 2, true);
+            context.fill();
+            context.closePath();
+        }
+        Star.prototype = {
+            constructor: Star,
+            update: function () {
+                // move by velocity
+                this.x += this.vx;
+                this.y += this.vy;
+                // increase alpha by 0.005 (remember this happens 30 times a second)
+                this.a += 5e-3;
+                if (this.a >= .9) { // this is the slight flicker
+                    this.a -= .15;
+                }
+            },
+            render: function (context) {
+                context.globalAlpha = this.a;
+                context.drawImage(this.img, this.x, this.y);
+            }
+        };
+
+        function Sky(amount, min, max, fp) {
+            this.a = amount;
+            this.mi = min; // min star size
+            this.ma = max; // max star size
+            this.fp = fp; // fall percent? I really didn't know what to call this
+            this.s = []; // stars array
+            for (var i = 0; i < amount; i++) {
+                this.s.push(new Star(Math.random() * width, Math.random() * height, Math.random() * (max - min) + min));
+            }
+        }
+        Sky.prototype = {
+            constructor: Sky,
+            update: function () {
+                var f = false; // found a star to fall
+                // we use this so only one star per pass can fall
+                for (var i = 0; i < this.a; i++) {
+                    this.s[i].update(); // update the stars position and alpha
+                    if (this.s[i].y > height) { // if the star is off screen reset it
+                        this.s[i].a = 0;
+                        this.s[i].x = Math.random() * width;
+                        this.s[i].y = Math.random() * height;
+                        this.s[i].vx = 0;
+                        this.s[i].vy = 0;
+                    }
+                    if( f ) { // if a star has already fallen continue to the next star
+                        continue;
+                    }
+                    // if rand is less than the very small number and alpha is greater than 80% trigger a fall
+                    if( Math.random() < this.fp && this.s[i].a >= .8 ) {
+                        this.s[i].vx = Math.random() * 1 + 1;
+                        this.s[i].vy = Math.random() * 2 + 8;
+                        f = true; // remember to set found to true
+                    }
+                }
+            },
+            render: function (context) {
+                context.shadowBlur = Math.random() * 15 + 5;
+                context.shadowColor = '#fff';
+                // render the stars
+                for (var i = 0; i < this.a; i++) {
+                    this.s[i].render(context);
+                }
+            }
+        };
+        var canvas, context, height, width, sky;
+        // codepen bug, you need this otherwise height/width are messed up
+        setTimeout(init, 10);
+        // and the rest.
+        function init() {
+            canvas = document.getElementById('sky');
+            context = canvas.getContext('2d');
+            resize();
+            sky = new Sky(500, 1, 4, 1e-5 /* 0.00001 , this is that very small random chance value for the fall check */ );
+            update();
+            render();
+            window.onresize = resize;
+        }
+
+        function update() {
+            sky.update();
+            setTimeout(update, 1000 / 30);
+        }
+
+        function render() {
+            context.clearRect(0, 0, width, height);
+            sky.render(context);
+            requestAnimationFrame(render);
+        }
+
+        function resize() {
+            height = canvas.height = document.body.offsetHeight;
+            width = canvas.width = document.body.offsetWidth;
+        }
+
+        $(document).ready(function()
+        {
+            var text = ["“Everybody is a genius. But if you judge a fish by its ability to climb a tree, it will spend its whole life believing that it is stupid.”<br />– Albert Einstein","“My advice is, never do tomorrow what you can do today. Procrastination is the thief of time.” <br />– Charles Dickens ","“Success consists of going from failure to failure without loss of enthusiasm.” <br />– Winston Churchill","“Don’t say you don’t have enough time. You have exactly the same amount of hours per day that were given to… Michelangelo, Mother Teresa, Leonardo Di Vinci… and Albert Einstein.”<br /> – H. Jackson Brown Jr.","“Help will always be given at Hogwarts to those who ask.” <br />– Albus Dumbledore","“You may encounter many defeats, but you must not be defeated. In fact, it may be necessary to encounter the defeats, so you can know who you are, what you can rise from, how you can still come out of it.” <br />— Maya Angelou","“Trust yourself, you know more than you think you do” <br />– Benjamin Spock","“I haven’t started yet either…” <br />– every student ever"];
+            var x = Math.floor((Math.random()*8));
+            $('#myTxt').html(text[x]);
+
+        });
+    </script>
 </head>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">StudBuddy</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <!--            <li class="nav-item dropdown">-->
-            <!--                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>-->
-            <!--                <div class="dropdown-menu" aria-labelledby="dropdown01">-->
-            <!--                    <a class="dropdown-item" href="#">Action</a>-->
-            <!--                    <a class="dropdown-item" href="#">Another action</a>-->
-            <!--                    <a class="dropdown-item" href="#">Something else here</a>-->
-            <!--                </div>-->
-            <!--            </li>-->
-        </ul>
-        <ul class="navbar-nav rounded-right">
-            <li class="nav-item">
-                <a class="nav-link" href="/login">Login<span class="sr-only">(current)</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="/register">Register<span class="sr-only">(current)</span></a>
-            </li>
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
-        </ul>
-        <!--        <form class="form-inline my-2 my-lg-0">-->
-        <!--            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">-->
-        <!--            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>-->
-        <!--        </form>-->
-    </div>
-</nav>
 <body>
-<br>
-<div class="container">
-    <div class="jumbotron">
-        <h1 align="center">Welcome to StudyBuddy- A friend to help you a night before your quiz!</h1>
-    </div>
+<div class="stars"></div>
+<div class="twinkling"></div>
+<div class="clouds">
+    <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
+        <a class="navbar-brand" href="/">StudyBuddy</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <!--            <li class="nav-item dropdown">-->
+                <!--                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>-->
+                <!--                <div class="dropdown-menu" aria-labelledby="dropdown01">-->
+                <!--                    <a class="dropdown-item" href="#">Action</a>-->
+                <!--                    <a class="dropdown-item" href="#">Another action</a>-->
+                <!--                    <a class="dropdown-item" href="#">Something else here</a>-->
+                <!--                </div>-->
+                <!--            </li>-->
+            </ul>
+            <ul class="navbar-nav rounded-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login<span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register<span class="sr-only">(current)</span></a>
+                </li>
+                <!--            <li class="nav-item">-->
+                <!--                <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>-->
+                <!--            </li>-->
+            </ul>
+            <!--        <form class="form-inline my-2 my-lg-0">-->
+            <!--            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">-->
+            <!--            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>-->
+            <!--        </form>-->
+        </div>
+    </nav>
+    <form>
+        <div id="mydiv">
+            <span id="myTxt"></span>
+        </div>
+    </form>
+   
 </div>
 
 <script src='/bower_components/jquery/dist/jquery.js'></script>

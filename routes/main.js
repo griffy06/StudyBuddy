@@ -14,8 +14,9 @@ router.get('/course/:id/view', function (req,res,next) {
             console.log('No such entry');
             return;
         }
+
         else {
-            Course.find({sem_id:post.sem_id},{},function(err1,course){
+            Course.find({sem_id:post[0].sem_id},{},function(err1,course){
                 console.log(course);
                 if (err1) {
                     console.log('No such entry');
@@ -36,7 +37,7 @@ router.get('/:id', function (req,res,next) {
             console.log('No such entry');
             return;
         } else {
-            console.log(course);
+            //console.log(course);
             res.render('courses', {course: course, sem:req.params.id});
         }
     });

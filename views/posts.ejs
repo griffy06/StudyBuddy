@@ -38,7 +38,7 @@
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                     <% course.forEach(function(item){%>
-                    <a class="dropdown-item" href="/main/course/<%= course.course_id%>/view"><%= course.course_name%></a>
+                    <a class="dropdown-item" href="/main/course/<%= item.course_id%>/view"><%= item.course_name%></a>
                     <%});%>
                 </div>
             </li>
@@ -75,7 +75,7 @@
                     Written by: <%= item.author%><br>
                     Likes: <%= item.no_of_likes%>  Dislikes: <%= item.no_of_dislikes%>
                 </p>
-            </li>
+            </li><br>
         <%});%>
         <!--    <form action="\logout"><button type="submit" class="btn-danger">Logout!</button></form>-->
     </div>

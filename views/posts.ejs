@@ -72,7 +72,7 @@
 <div class="container">
     <div class="jumbotron text-center">
         <h1 align="center"> Course: <%= current_course%></h1><br>
-        <% post.forEach(function(item){ %>
+        <% if(post!=undefined){post.forEach(function(item){ %>
             <li class="list-group-item">
                 <p>
                     <%= item.content%><br>
@@ -80,7 +80,8 @@
                     Likes: <%= item.no_of_likes%>  Dislikes: <%= item.no_of_dislikes%>
                 </p>
             </li><br>
-        <%});%>
+        <%});}%>
+        
         <!--    <form action="\logout"><button type="submit" class="btn-danger">Logout!</button></form>-->
     </div>
 

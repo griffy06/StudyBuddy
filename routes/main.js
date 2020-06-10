@@ -16,16 +16,26 @@ router.get('/course/:id/view', function (req,res,next) {
         }
 
         else {
-            Course.find({sem_id:post[0].sem_id},{},function(err1,course){
-                console.log(course);
-                if (err1) {
-                    console.log('No such entry');
-                    return;
-                }
-                else{
-                    res.render('posts', {post: post, course:course, current_course:req.params.id});
-                }
-            });
+             Course.find({course_id:req.params.id},{},function(err1,course1) {
+                    console.log(course1);
+                    if (err1) {
+                        console.log('No such entry');
+                        return;
+                    } else {
+                        Course.find({sem_id:course1[0].sem_id},{},function(err2,course){
+                            //console.log(course);
+                            if (err2) {
+                                console.log('No such entry');
+                                return;
+                            }
+                            else{
+                                res.render('posts', {post: post, course:course, current_course:req.params.id});
+                                return;
+                            }
+                        });
+                    }
+                });
+
         }
         });
 });

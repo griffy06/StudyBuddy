@@ -1,2 +1,2 @@
-# A_night_before_the_quiz
+# StudyBuddy
 The ultimate guide for a night before the quiz wanderers :p

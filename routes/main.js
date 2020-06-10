@@ -7,16 +7,26 @@ router.get('/', function (req,res,next) {
     res.render('main');
 })
 router.get('/course/:id/view', function (req,res,next) {
-    console.log('done');
-    Post.find({course_id:req.params.id},{},function (err, post){
-        if (err) {
+    // console.log('done');
+    //let course= Course.find({course_id:req.params.id});
+        Post.find({course_id:req.params.id},{},function (err, post){
+        if(err){
             console.log('No such entry');
             return;
-        } else {
-            console.log(post);
-            res.render('posts', {post: post, course:req.params.id});
         }
-    });
+        else {
+            Course.find({sem_id:post.sem_id},{},function(err1,course){
+                console.log(course);
+                if (err1) {
+                    console.log('No such entry');
+                    return;
+                }
+                else{
+                    res.render('posts', {post: post, course:course, current_course:req.params.id});
+                }
+            });
+        }
+        });
 });
 
 router.get('/:id', function (req,res,next) {

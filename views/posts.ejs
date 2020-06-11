@@ -7,6 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <title>main</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        setTimeout(function() {
+            $("#messages").fadeOut().empty();
+        }, 1000);
+    </script>
 
 </head>
 <body>
@@ -68,6 +74,7 @@
         <!--        </form>-->
     </div>
 </nav>
+<%- messages('message', locals) %>
 <br>
 <div class="container">
     <div class="jumbotron text-center">

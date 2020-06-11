@@ -6,9 +6,14 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 const passport = require('passport');
 const config = require('./config/database');
+const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
+const flash = require('connect-flash');
+const session = require('express-session');
+
 
 mongoose.connect(config.database,{ useNewUrlParser: true , useUnifiedTopology: true });
-global.db = mongoose.connection;
+db = mongoose.connection;
 
 //check connection
 db.once('open',function(){
@@ -31,8 +36,44 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+
+//express session middleware
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}))
+
+//express-messages middleware
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
+
+//express-validator middleware
+app.use(expressValidator({
+  errorFormatter: function (param,msg,value) {
+    var namespace = param.split('.')
+    , root = namespace.shift()
+    , formParam = root;
+
+    while (namespace.length){
+      formParam += '[' + namespace.shift() + ']';
+    }
+
+    return {
+      param: formParam,
+      msg: msg,
+      value: value
+    }
+  }
+}))
+
+
 app.set('view engine', 'ejs');
 
+app.use(bodyParser.urlencoded({ extended : true }));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

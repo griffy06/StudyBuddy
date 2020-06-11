@@ -133,6 +133,9 @@
             $('#myTxt').html(text[x]);
 
         });
+        setTimeout(function() {
+            $("#messages").fadeOut().empty();
+        }, 1000);
     </script>
 </head>
 
@@ -178,6 +181,7 @@
             <!--        </form>-->
         </div>
     </nav>
+    <%- messages('message', locals) %>
     <div>
         <img src="/images/LOGO.png" height="400" width="450" class="logo">
 

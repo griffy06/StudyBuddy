@@ -9,6 +9,12 @@
     <link rel='stylesheet' href='/stylesheets/style4.css' />
     <link rel='stylesheet' href='/stylesheets/style5.css' />
     <title>main</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        setTimeout(function() {
+            $("#messages").fadeOut().empty();
+        }, 1000);
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
@@ -54,6 +60,7 @@
         <!--        </form>-->
     </div>
 </nav>
+<%- messages('message', locals) %>
 <br>
 <div class="container">
     <ul class="bubbles">

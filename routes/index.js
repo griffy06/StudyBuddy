@@ -43,6 +43,7 @@ router.post('/register', function(req,res){
           }
           else
           {
+            req.flash('success','Successfully registered!');
             res.redirect('/');
           }
         });
@@ -59,13 +60,14 @@ router.post('/login', function (req,res,next) {
   passport.authenticate('local',{
     successRedirect:'/main',
     failureRedirect:'/login',
-    // failureFlash: true
+     failureFlash: true
 
   })(req,res,next);
 })
 
 router.get('/logout', function (req,res,next) {
   req.logout();
+  req.flash('success', 'Logged out!')
   res.redirect('/');
 })
 

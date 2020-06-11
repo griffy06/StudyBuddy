@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="/stylesheets/style2.css" type="text/css">
     <link rel="stylesheet" href="/stylesheets/style3.css" type="text/css">
     <title>register</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        setTimeout(function() {
+            $("#messages").fadeOut().empty();
+        }, 1000);
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
@@ -49,6 +55,7 @@
         <!--        </form>-->
     </div>
 </nav>
+<%- messages('message', locals) %>
 <div class="register">
     <h1>Register</h1><br>
     <form method="post" action="/register">

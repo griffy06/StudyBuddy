@@ -26,6 +26,11 @@ const PostSchema = mongoose.Schema({
     no_of_dislikes:{
         type:Number,
         required:true
+    },
+
+    tag:{
+        type: Array,
+        required: true
     }
 });
 

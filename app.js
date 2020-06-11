@@ -8,7 +8,7 @@ const passport = require('passport');
 const config = require('./config/database');
 
 mongoose.connect(config.database,{ useNewUrlParser: true , useUnifiedTopology: true });
-var db = mongoose.connection;
+global.db = mongoose.connection;
 
 //check connection
 db.once('open',function(){
@@ -67,3 +67,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+//module.exports = db;

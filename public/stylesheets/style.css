@@ -137,3 +137,9 @@ header a, a:visited {
 
 
 }
+.course {
+  opacity: 90%;
+}
+.course:hover{
+  background-color: #ffffff;
+}

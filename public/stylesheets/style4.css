@@ -8,7 +8,7 @@
     padding: 0;
 }
 body, input {
-    font-family: "Hind", sans-serif;
+    font-family: "Helvetica Neue", sans-serif;
     font-size: 1em;
 }
 body {
@@ -130,7 +130,7 @@ input[type=reset]:active {
     transform-origin: top center;
 }
 .spine, .right::after, .contents h1 {
-    font-family: "Lora", serif;
+    font-family: "Helvetica Neue", serif;
     font-weight: bold;
     -webkit-font-smoothing: antialiased;
 }
@@ -158,7 +158,7 @@ input[type=reset]:active {
     font-size: 2em;
 }
 .contents p {
-    font-family: "Source Sans Pro", serif;
+    font-family: "Helvetica Neue", serif;
 }
 .b1 {
     display: block;

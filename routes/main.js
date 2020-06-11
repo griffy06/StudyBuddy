@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 let Course=require('../models/course');
 let Post=require('../models/post');
+//let go=require('../app');
 
 router.get('/', function (req,res,next) {
     res.render('main');
@@ -71,6 +72,7 @@ router.post('/course/:id/create', function (req,res,next) {
     p.no_of_likes=0;
     p.author=req.body.author;
     p.content=req.body.content;
+    p.tag = req.body.tags.split(',');
 
     Course.find({course_id:req.params.id},{},function(err1,course1){
                 console.log(course1);
@@ -92,14 +94,61 @@ router.post('/course/:id/create', function (req,res,next) {
                                     console.log(err2);
                                 }
                             else{
-                                res.render('courses', {course: course, sem: course[0].sem_id});
-                        }
+                                   return res.redirect('/main/course/'+req.params.id+'/view');
+                            }
                     });
                 }
             });
         }
     });
 
+});
+
+router.post('/course/:id/view', function (req,res,next) {
+    console.log(req.body.searchBy);
+    let tags = req.body.searchBy.split(',');
+    let arr=[];
+    Post.find(function (err,post) {
+        if(err) console.log(err);
+        else
+        {
+            post.forEach(function (temp) {
+                    tags.forEach(function (tag) {
+                            if (temp.tag.indexOf(tag) !== -1) {
+                                arr.push(temp);
+                            }
+
+                    })
+            })
+            let arrUnique = [];
+            arr.forEach(function (arr_element) {
+                if(arrUnique.indexOf(arr_element)===-1)
+                    arrUnique.push(arr_element);
+            })
+            console.log(arrUnique);
+            Course.find({course_id:req.params.id},{},function(err1,course1) {
+                console.log(course1);
+                if (err1) {
+                    console.log('No such entry');
+                    return;
+                } else {
+                    Course.find({sem_id:course1[0].sem_id},{},function(err2,course){
+                        //console.log(course);
+                        if (err2) {
+                            console.log('No such entry');
+                            return;
+                        }
+                        else{
+                            res.render('posts', {post: arrUnique, course:course, current_course:req.params.id});
+                            return;
+                        }
+                    });
+                }
+            });
+
+
+        }
+    })
 });
 
 router.get('/:id', function (req,res,next) {

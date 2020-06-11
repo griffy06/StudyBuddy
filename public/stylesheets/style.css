@@ -121,3 +121,18 @@ header a, a:visited {
   margin-left: -300px;
   z-index: 10;
 }
+.owl
+{
+  top: 100%;
+  margin-top: 180px;
+  margin-left: 0px;
+}
+
+.logo
+{
+  left: 50%;
+  /*background: white;*/
+  margin-top: 0px;
+  margin-left: 150px;
+
+}

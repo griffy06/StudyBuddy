@@ -117,7 +117,7 @@ header a, a:visited {
   top: 50%;
   left: 50%;
   /*background: white;*/
-  margin-top: -125px;
+  margin-top: -50px;
   margin-left: -300px;
   z-index: 10;
 }
@@ -130,9 +130,10 @@ header a, a:visited {
 
 .logo
 {
-  left: 50%;
+  position: absolute;
+  left: 31.5%;
   /*background: white;*/
-  margin-top: 0px;
-  margin-left: 150px;
+  margin-top: -50px;
+
 
 }

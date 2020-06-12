@@ -5,49 +5,66 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.css' />
-    <link rel="stylesheet" href="/stylesheets/style2.css" type="text/css">
-    <link rel="stylesheet" href="/stylesheets/style3.css" type="text/css">
-    <title>register</title>
+    <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
+    <title>main</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         setTimeout(function() {
             $("#messages").fadeOut().empty();
         }, 1000);
     </script>
+    <style>
+        body {
+            background-color: #a4a5a7;
+            background: linear-gradient(180deg, #76777a 0%, #39393c 37%, #000108 100%) fixed;
+        }
+        .post{
+            opacity:70%;
+            height: 100%;
+        }
+    </style>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
-    <a class="navbar-brand" href="/">StudBuddy</a>
+    <a class="navbar-brand" href="/">StudyBuddy</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
+
         </ul>
         <ul class="navbar-nav rounded-right">
             <li class="nav-item">
-                <a class="nav-link" href="/login">Login<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
             </li>
-
             <li class="nav-item">
-                <a class="nav-link" href="/register">Register<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
         </ul>
     </div>
 </nav>
 <%- messages('message', locals) %>
-<div class="register">
-    <h1>Register</h1><br>
-    <form method="post" action="/register">
-        <input type="text" name="name" placeholder="Name" required="required" />
-        <input type="email" name="email" placeholder="Email" required="required" />
-        <input type="text" name="username" placeholder="Username" required="required" />
-        <input type="password" name="password" placeholder="Password" required="required" />
-        <input type="password" name="confirm" placeholder="Confirm Password" required="required" /><br><br>
-        <button type="submit" class="btn btn-primary btn-block btn-large">Join the club!</button>
-    </form>
+<br>
+<div class="container">
+    <h1 align="center" style="color: white">My Posts</h1><br>
+    <% if(post!=undefined){post.forEach(function(item){ %>
+        <div class="post" align="center">
+            <li class="list-group-item bg-dark post">
+                <p style="color: white">
+                    <%= item.content%><br>
+                    Written by: <%= item.author%><br>
+                    Likes:  <%= item.no_of_likes%>  Dislikes: <%= item.no_of_dislikes%>
+                </p>
+            </li>
+        </div>
+        <br>
+    <%});}%>
 </div>
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>

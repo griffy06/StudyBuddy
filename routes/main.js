@@ -169,7 +169,27 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
         req.user.name = req.user.name;
     }
     else{
+        var name=req.user.name;
         req.user.name = req.body.name;
+        Post.find({author:name},{},function(err,post){
+            console.log('this is'+post);
+            if(err){
+                return;
+            }
+            else{
+                post.forEach(function (item) {
+                    item.author = req.body.name;
+                    item.no_of_likes=item.no_of_likes;
+                    item.no_of_dislikes=item.no_of_dislikes;
+                    item.content=item.content;
+                    item.save(function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                })
+            }
+        })
     }
 
     if(req.body.email=='') {
@@ -219,7 +239,19 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
     }
 })
 
-
+router.get('/profile/myposts', ensureAuthenticated, function (req,res,next) {
+    console.log(req.user.name);
+    Post.find({author:req.user.name},{},function(err,post){
+        console.log(post);
+        if(err){
+            return;
+        }
+        else{
+            res.render('showMyPosts',{post:post});
+            return;
+        }
+    })
+});
 
 function ensureAuthenticated(req,res,next)
 {

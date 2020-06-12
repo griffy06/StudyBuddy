@@ -11,6 +11,11 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
+const crypto = require('crypto');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+const methodOverride = require('method-override');
 
 
 mongoose.connect(config.database,{ useNewUrlParser: true , useUnifiedTopology: true });
@@ -71,6 +76,7 @@ app.use(expressValidator({
   }
 }))
 
+app.use(methodOverride('_method'));
 
 app.set('view engine', 'ejs');
 
@@ -85,6 +91,40 @@ require('./config/passport')(passport);
 // passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+let gfs;
+
+db.once('open',()=>{
+  //init stream
+  gfs = Grid(db.db, mongoose.mongo);
+  gfs.collection('uploads');
+})
+
+//create storage engine
+
+const storage = new GridFsStorage({
+  url: config.database,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: 'uploads'
+        };
+        resolve(fileInfo);
+      });
+    });
+  }
+});
+global.upload = multer({ storage });
+
+
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

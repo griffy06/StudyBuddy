@@ -113,7 +113,9 @@
             <li class="list-group-item bg-dark post">
                 <p style="color: white" align="left">
                     <%= item.content%><br>
-                    Written by: <%= item.author%> @<%= item.authorid%><br><br><br>
+                    Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">
+                        @<%= item.authorid%>
+                    </a><br><br><br>
                 </p>
                 <a href="/main/<%= item._id%>/like"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
                         <% if(user.posts_liked.indexOf(item._id)!==-1){%>

@@ -39,12 +39,17 @@
             </li>
         </ul>
         <ul class="navbar-nav rounded-right">
+            <% if(viewer=='me'){%>
             <li class="nav-item">
                 <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
             </li>
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
+                <%}%>
+                <% if(viewer=='other'){%>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/main/<%= user.username%>/viewAuthor">Go back to Profile<span class="sr-only">(current)</span></a>
+                    </li>
+                <%}%>
+
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
@@ -63,12 +68,14 @@
                     Written by: <%= item.author%> @<%= item.authorid%><br>
                     Likes:  <%= item.no_of_likes%>  Dislikes: <%= item.no_of_dislikes%>
                 </p>
+                <% if(viewer=='me'){%>
                 <% if(title=='My Posts'){%>
                 <a href="/main/profile/myposts/<%= item._id%>/edit"><button type="button" class="btn btn-success btn-circle btn-group-sm">Edit</button></a>
                 <a href="/main/profile/myposts/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-circle btn-group-sm">Delete</button></a>
                 <%}%>
                 <% if(title=='Favourite Posts'){%>
                     <a href="/main/profile/bookmarks/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-circle btn-group-sm">Delete</button></a>
+                <%}%>
                 <%}%>
             </li>
         </div>

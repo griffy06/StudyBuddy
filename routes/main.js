@@ -149,8 +149,8 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
     })
 });
 router.get('/profile', ensureAuthenticated, function (req,res,next) {
-        console.log(req.user);
-        res.render('showProfile',{user:req.user});
+        //console.log(req.user);
+        res.render('showProfile',{user:req.user,viewer:'me'});
 });
 
 router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
@@ -276,7 +276,7 @@ router.get('/profile/myposts', ensureAuthenticated, function (req,res,next) {
             return;
         }
         else{
-            res.render('showMyPosts',{post:post,title:'My Posts'});
+            res.render('showMyPosts',{user:req.user,post:post,title:'My Posts',viewer:'me'});
             return;
         }
     })
@@ -323,6 +323,8 @@ router.get('/profile/myposts/:id/delete', ensureAuthenticated, function (req,res
         else{
             let user=req.user;
             user.posts_bookmarked.splice(user.posts_bookmarked.indexOf(req.params.id),1);
+            user.posts_liked.splice(user.posts_liked.indexOf(req.params.id),1);
+            user.posts_disliked.splice(user.posts_disliked.indexOf(req.params.id),1);
             User.update({_id:req.user._id},user,function(err){
                 if (err) {
                     console.log(err);
@@ -450,6 +452,39 @@ router.get('/profile/bookmarks/:id/delete', ensureAuthenticated, function (req,r
             console.log(err);
         } else {
             res.redirect('/main/profile/bookmarks');
+        }
+    })
+});
+
+router.get('/:id/viewAuthor', ensureAuthenticated, function (req,res) {
+    User.find({username:req.params.id},function (err,user) {
+        if(err)
+        {
+            console.log(err);
+        }
+        else {
+            res.render('showProfile',{user:user[0], viewer:'other'});
+        }
+    })
+});
+
+router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
+    User.find({username:req.params.id},function (err,user) {
+        if(err)
+        {
+            console.log(err);
+        }
+        else {
+            Post.find({authorid:user.username},{},function(err,post){
+                console.log(post);
+                if(err){
+                    return;
+                }
+                else{
+                    res.render('showMyPosts',{user:user[0],post:post,title:'All Posts by '+user[0].name,viewer:'other'});
+                    return;
+                }
+            })
         }
     })
 });

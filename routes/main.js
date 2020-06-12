@@ -321,10 +321,19 @@ router.get('/profile/myposts/:id/delete', ensureAuthenticated, function (req,res
             return;
         }
         else{
-            res.redirect('/main/profile/myposts');
-            return;
+            let user=req.user;
+            user.posts_bookmarked.splice(user.posts_bookmarked.indexOf(req.params.id),1);
+            User.update({_id:req.user._id},user,function(err){
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.redirect('/main/profile/myposts');
+                    return;
+                }
+            })
         }
     })
+
 });
 router.get('/:id/like', ensureAuthenticated, function (req,res,next) {
     let user=req.user;
@@ -432,6 +441,19 @@ router.get('/profile/bookmarks', ensureAuthenticated, function (req,res) {
         return;
         })
 });
+
+router.get('/profile/bookmarks/:id/delete', ensureAuthenticated, function (req,res) {
+    let user=req.user;
+    user.posts_bookmarked.splice(user.posts_bookmarked.indexOf(req.params.id),1);
+    User.update({_id:req.user._id},user,function(err){
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect('/main/profile/bookmarks');
+        }
+    })
+});
+
 function ensureAuthenticated(req,res,next)
 {
     if(req.isAuthenticated()) {

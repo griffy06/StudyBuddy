@@ -67,6 +67,9 @@
                 <a href="/main/profile/myposts/<%= item._id%>/edit"><button type="button" class="btn btn-success btn-circle btn-group-sm">Edit</button></a>
                 <a href="/main/profile/myposts/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-circle btn-group-sm">Delete</button></a>
                 <%}%>
+                <% if(title=='Favourite Posts'){%>
+                    <a href="/main/profile/bookmarks/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-circle btn-group-sm">Delete</button></a>
+                <%}%>
             </li>
         </div>
         <br>

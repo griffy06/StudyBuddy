@@ -6,6 +6,36 @@ let User=require('../models/user');
 const bcrypt = require('bcryptjs');
 let Com=require('../models/comment');
 const passport = require('passport');
+const crypto = require('crypto');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+const methodOverride = require('method-override');
+const config = require('../config/database');
+var path = require('path');
+let metadata;
+
+const storage = new GridFsStorage({
+    url: config.database,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'uploads',
+                    metadata: metadata?metadata:null
+                };
+                resolve(fileInfo);
+            });
+        });
+    }
+});
+const upload = multer({ storage });
+
 
 router.get('/', ensureAuthenticated, function (req,res,next) {
     res.render('main');
@@ -63,46 +93,50 @@ router.get('/course/:id/create', ensureAuthenticated, function (req,res,next) {
             });
 });
 
-router.post('/course/:id/create', ensureAuthenticated, function (req,res,next) {
-    let p= new Post();
-    p.no_of_dislikes=0;
-    p.no_of_likes=0;
-    p.author=req.user.name;
-    p.authorid=req.user.username;
-    p.content=req.body.content;
-    p.no_of_comments=0;
-    p.tag = req.body.tags.split(',');
-
-    Course.find({course_id:req.params.id},{},function(err1,course1){
-                console.log(course1);
-                if (err1) {
-                    console.log('No such entry');
-                    return;
-                }
-                else {
-                    Course.find({sem_id: course1[0].sem_id}, {}, function (err, course) {
-                        console.log(course);
-                        if (err) {
-                            console.log('No such entry');
-                            return;
-                        } else {
-                            p.course_id=req.params.id;
-                            p.sem_id=course1[0].sem_id;
-                            p.save(function(err2){
-                                if(err2){
-                                    console.log(err2);
-                                }
-                            else{
-                                   req.flash('success', 'Post created successfully!');
-                                   return res.redirect('/main/course/'+req.params.id+'/view');
+router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50), function (req,res,next) {
+        let p= new Post();
+        p.no_of_dislikes=0;
+        p.no_of_likes=0;
+        p.author=req.user.name;
+        p.no_of_comments=0;
+        p.content=req.body.content;
+        p.tag = req.body.tags.split(',');
+        Course.find({course_id:req.params.id},{},function(err1,course1){
+            if (err1) {
+                console.log('No such entry');
+                return;
+            }
+            else {
+                Course.find({sem_id: course1[0].sem_id}, {}, function (err, course) {
+                    if (err) {
+                        console.log('No such entry');
+                        return;
+                    } else {
+                        p.course_id=req.params.id;
+                        p.sem_id=course1[0].sem_id;
+                        p.save(function(err2){
+                            if(err2){
+                                console.log(err2);
                             }
-                    });
-                }
-            });
-        }
-    });
+                            else{
+                                metadata = p._id;
+                                req.files.forEach(function(file){
+                                    file.metadata = req.user.id;
+                                    console.log("what");
+                                    console.log(file.metadata);
+                                })
 
-});
+                                 req.flash('success', 'Post created successfully!');
+                                 return res.redirect('/main/course/'+req.params.id+'/view');
+                         }
+                 });
+             }
+         });
+     }
+ });
+ });
+
+
 
 router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
     //console.log(req.body.searchBy);
@@ -505,10 +539,9 @@ function ensureAuthenticated(req,res,next)
         return next();
     }
     else {
-        console.log("here");
+        req.flash('danger','Not logged in!');
         res.redirect('/login');
     }
 }
-
 
 module.exports = router;

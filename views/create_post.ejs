@@ -64,7 +64,7 @@
 <%- messages('message', locals) %>
 <div class="container">
     <h2 align="center">New Post</h2>
-    <form method="post" action="/main/course/<%= current_course%>/create">
+    <form method="post" action="/main/course/<%= current_course%>/create" enctype="multipart/form-data">
         <div class="form-group">
             <label for="content">Content</label>
             <textarea type="text" class="form-control" id="content" name="content" placeholder="Enter content" ></textarea>
@@ -73,7 +73,16 @@
             <label for="tags">Tags</label>
             <textarea type="text" class="form-control" id="tags" name="tags" placeholder="Enter all tags separated by comma" ></textarea>
         </div>
-        <button type="submit" class="btn-dark">Add</button>
+
+
+
+        <div>
+            <label>Select multiple files:</label>
+            <input type="file" name="files" multiple />
+        </div>
+
+            <button type="submit" class="btn-dark">Add</button>
+
     </form>
 </div>
 <script src='/bower_components/jquery/dist/jquery.js'></script>

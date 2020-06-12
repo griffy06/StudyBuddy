@@ -9,6 +9,12 @@
     <link rel='stylesheet' href='/stylesheets/style5.css' />
 <!--    <link rel="stylesheet" href="/stylesheets/style.css">-->
     <title>main</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        setTimeout(function() {
+            $("#messages").fadeOut().empty();
+        }, 1000);
+    </script>
     <style>
         .course {
             opacity: 90%;
@@ -79,7 +85,7 @@
             <!--        </form>-->
         </div>
     </nav>
-
+<%- messages('message', locals) %>
 <br>
 
 <div class="container">

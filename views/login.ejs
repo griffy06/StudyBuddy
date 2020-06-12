@@ -9,6 +9,12 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/style2.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/style3.css">
     <title>Login</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        setTimeout(function() {
+            $("#messages").fadeOut().empty();
+        }, 1000);
+    </script>
 </head>
 
 <body>
@@ -52,6 +58,7 @@
         </div>
     </nav>
 </div>
+<%- messages('message', locals) %>
 <div class="login">
     <h1>Login</h1><br>
     <form method="post" action="/login">

@@ -4,10 +4,10 @@ let Course=require('../models/course');
 let Post=require('../models/post');
 //let go=require('../app');
 
-router.get('/', function (req,res,next) {
+router.get('/', ensureAuthenticated, function (req,res,next) {
     res.render('main');
 })
-router.get('/course/:id/view', function (req,res,next) {
+router.get('/course/:id/view', ensureAuthenticated, function (req,res,next) {
     // console.log('done');
     //let course= Course.find({course_id:req.params.id});
         Post.find({course_id:req.params.id},{},function (err, post){
@@ -41,7 +41,7 @@ router.get('/course/:id/view', function (req,res,next) {
         });
 });
 
-router.get('/course/:id/create', function (req,res,next) {
+router.get('/course/:id/create', ensureAuthenticated, function (req,res,next) {
     // console.log('done');
     //let course= Course.find({course_id:req.params.id});
             Course.find({course_id:req.params.id},{},function(err1,course1){
@@ -64,7 +64,7 @@ router.get('/course/:id/create', function (req,res,next) {
             });
 });
 
-router.post('/course/:id/create', function (req,res,next) {
+router.post('/course/:id/create', ensureAuthenticated, function (req,res,next) {
     // console.log('done');
     //let course= Course.find({course_id:req.params.id});
     let p= new Post();
@@ -94,6 +94,7 @@ router.post('/course/:id/create', function (req,res,next) {
                                     console.log(err2);
                                 }
                             else{
+                                   req.flash('success', 'Post created successfully!');
                                    return res.redirect('/main/course/'+req.params.id+'/view');
                             }
                     });
@@ -104,7 +105,7 @@ router.post('/course/:id/create', function (req,res,next) {
 
 });
 
-router.post('/course/:id/view', function (req,res,next) {
+router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
     console.log(req.body.searchBy);
     let tags = req.body.searchBy.split(',');
     let arr=[];
@@ -151,7 +152,7 @@ router.post('/course/:id/view', function (req,res,next) {
     })
 });
 
-router.get('/:id', function (req,res,next) {
+router.get('/:id', ensureAuthenticated, function (req,res,next) {
     console.log(req.params.id);
     Course.find({sem_id:req.params.id},{}, function (err, course) {
         if (err) {
@@ -163,5 +164,17 @@ router.get('/:id', function (req,res,next) {
         }
     });
 });
+
+function ensureAuthenticated(req,res,next)
+{
+    if(req.isAuthenticated()) {
+        return next();
+    }
+    else {
+        console.log("here");
+        res.redirect('/login');
+    }
+}
+
 
 module.exports = router;

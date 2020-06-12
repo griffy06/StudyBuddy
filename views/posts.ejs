@@ -62,6 +62,9 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/main">Home<span class="sr-only">(current)</span></a>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Semester</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -92,9 +95,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>
-            </li>
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>-->
+<!--            </li>-->
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
@@ -125,7 +128,14 @@
                             <%}else{%>
                                 <i class="fa fa-thumbs-down"></i>
                             <%}%>
-                    </button></a>&nbsp<%= item.no_of_dislikes%>
+                    </button></a>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/bookmark"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.posts_bookmarked.indexOf(item._id)===-1){%>
+                            <i class="fa fa-star-o"></i>
+                        <%}else{%>
+                            <i class="fa fa-star"></i>
+                        <%}%>
+                    </button></a>
             </li>
         </div>
         <br>

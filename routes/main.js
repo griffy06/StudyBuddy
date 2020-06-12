@@ -249,7 +249,7 @@ router.get('/profile/myposts', ensureAuthenticated, function (req,res,next) {
             return;
         }
         else{
-            res.render('showMyPosts',{post:post});
+            res.render('showMyPosts',{post:post,title:'My Posts'});
             return;
         }
     })
@@ -318,7 +318,49 @@ router.get('/:id/dislike', ensureAuthenticated, function (req,res,next) {
 
     })
 })
+router.get('/:id/bookmark', ensureAuthenticated, function (req,res,next) {
+    let user=req.user;
+    Post.findById(req.params.id,function(err,post) {
+        if (user.posts_bookmarked.indexOf(req.params.id) === -1)
+        {
+            console.log('here');
+            user.posts_bookmarked.push(req.params.id);
+        }
 
+        else
+        {
+            user.posts_bookmarked.splice(user.posts_bookmarked.indexOf(req.params.id),1);
+        }
+        User.update({_id:req.user._id},user,function(e){
+            if (err) {
+                console.log(err);
+            } else {
+                Post.update({_id: req.params.id}, post, function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.redirect('/main/course/' + post.course_id + '/view');
+                    }
+                })
+            }
+        })
+
+    })
+});
+router.get('/profile/bookmarks', ensureAuthenticated, function (req,res) {
+    //console.log(req.user.username);
+    var arr=[];
+    Post.find(function(err,post){
+        post.forEach(function(item){
+            req.user.posts_bookmarked.forEach(function(item1){
+                    if(item1==item._id)
+                    arr.push(item);
+                })
+            })
+        res.render('showMyPosts',{post:arr,title:'Favourite Posts'});
+        return;
+        })
+});
 function ensureAuthenticated(req,res,next)
 {
     if(req.isAuthenticated()) {

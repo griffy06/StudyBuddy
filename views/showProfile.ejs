@@ -36,21 +36,27 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
+                <a class="nav-link" href="/main">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="/main/profile/myposts">My Posts<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/main/profile/bookmarks">Favourite Posts<span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <ul class="navbar-nav rounded-right">
-            <li class="nav-item">
-                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>
-            </li>
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>-->
+<!--            </li>-->
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
         </ul>
     </div>
 </nav>
-<h1 align="center" style="color: white">Profile Details</h1>
 <%- messages('message', locals) %>
+<h1 align="center" style="color: white">Profile Details</h1>
 <div class="login">
     <form method="post" action="/main/editProfile">
         <label style="color:white">

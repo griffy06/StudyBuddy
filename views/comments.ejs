@@ -23,11 +23,31 @@
             opacity:90%;
             height: 100%;
         }
-
-        .fixed_button{
+        .btn-circle{
+            width: 40px;
+            height: 40px;
+            border-radius: 20px ;
+        }
+        .fixed_button1{
             position: fixed;
             bottom: 15px;
             right: 80px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px ;
+            z-index: 99;
+            -webkit-transform: translate3d(0,0,0);
+            -webkit-transition: all .25s ease;
+            -moz-transition: all .25s ease;
+            -ms-transition: all .25s ease;
+            -o-transition: all .25s ease;
+            transition: all .25s ease;
+            text-align: center;
+        }
+        .fixed_button2{
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
             width: 50px;
             height: 50px;
             border-radius: 25px ;
@@ -47,6 +67,9 @@
             bottom: 10px;
             right: 145px;
         }
+        #box{
+            display: none;
+        }
     </style>
     <script>
         function myFunction(x) {
@@ -55,7 +78,6 @@
     </script>
 
 </head>
-<form>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
     <a class="navbar-brand" href="/">StudyBuddy</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,6 +91,9 @@
             </li>
         </ul>
         <ul class="navbar-nav rounded-right">
+            <li class="nav-item">
+                <a class="nav-link" href="/main/course/<%= courseid%>/view">Back to Post<span class="sr-only">(current)</span></a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
             </li>
@@ -104,19 +129,33 @@
                         <%}else{%>
                             <i class="fa fa-thumbs-down"></i>
                         <%}%>
-                    </button></a>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
+                    </button></a>&nbsp<%= item.no_of_dislikes%>
             </li>
         </div>
         <br>
     <%});}%>
     <br>
 </div>
-<form method="post" action="/main/post_it/<%= comments[0].post_id%>">
-    <div class="form-group">
-        <textarea type="text" class="form-control fixed_box" id="content" name="content" placeholder="Comment here!" ></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary fixed_button"><i class="fa fa-paper-plane"></i></button>
-</form>
+<button onclick="myFunction()" class="btn btn-primary fixed_button2"><i class="fa fa-plus"></i></button>
+<div id="box">
+    <form method="post" action="/main/<%= postid%>/post%>">
+        <div class="form-group">
+            <textarea type="text" class="form-control fixed_box" id="content" name="content" placeholder="Comment here!" ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary fixed_button1"><i class="fa fa-paper-plane"></i></button>
+    </form>
+</div>
+<script>
+    function myFunction() {
+    var x = document.getElementById("box");
+    if (x.style.display === "none") {
+    x.style.display = "block";
+    } else {
+    x.style.display = "none";
+    }
+
+    }
+</script>
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>
 </body>

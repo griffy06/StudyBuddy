@@ -90,7 +90,9 @@
                     <%= item.content%><br>
                     Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a><br>
                     <i class="fa fa-thumbs-up"></i>&nbsp<%= item.no_of_likes%> &nbsp&nbsp&nbsp
-                    <i class="fa fa-thumbs-down"></i>&nbsp<%= item.no_of_dislikes%>
+                    <i class="fa fa-thumbs-down"></i>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
+                    <a href="/main/<%= item._id%>/comments">
+                            <i class="fa fa-comment"></i></a>&nbsp<%= item.no_of_comments%>
                 </p>
                 <% if(viewer=='me'){%>
                 <% if(title=='My Posts'){%>

@@ -530,29 +530,105 @@ router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
 router.get('/:id/comments', ensureAuthenticated, function (req,res) {
     Comment.find({post_id: req.params.id},{},function(err,comments){
         //console.log(comments);
-        res.render('comments',{user:req.user,comments:comments});
+        Post.find({_id:req.params.id},{},function(err,post){
+            res.render('comments',{courseid:post[0].course_id,postid:req.params.id,user:req.user,comments:comments});
+        })
     })
 });
 
-router.post('/post_it/:id', ensureAuthenticated, function (req,res) {
+router.post('/:id/post', ensureAuthenticated, function (req,res) {
     let c=new Comment();
-    console.log('rohini');
     c.post_id=req.params.id;
     c.no_of_likes=0;
     c.no_of_dislikes=0;
     c.authorid=req.user.username;
     c.author=req.user.name;
     c.content=req.body.content;
-    c.save(function (err) {
-        if(err){
-            console.log(err);
+    Post.find({_id:req.params.id},{},function(err,post) {
+        if (err) {
+            console.log(err)
+        } else {
+            post[0].no_of_comments += 1;
+            post[0].save(function (err1) {
+                if (err1) {
+                    console.log(err1);
+                } else {
+                    c.save(function (err2) {
+                        if (err2) {
+                            console.log(err2);
+                        } else {
+                            res.redirect('/main/' + req.params.id + '/comments');
+                        }
+                    })
+                }
+            })
         }
-        else{
-            res.redirect('main/'+c.post_id+'/comments');
+    })
+
+});
+
+router.get('/:id/commentLike', ensureAuthenticated, function (req,res,next) {
+    let user=req.user;
+    Comment.findById(req.params.id,function(err,post) {
+        if (user.comments_liked.indexOf(req.params.id) === -1)
+        {
+            post.no_of_likes = post.no_of_likes + 1;
+            user.comments_liked.push(req.params.id);
         }
+
+        if (user.comments_disliked.indexOf(req.params.id) !== -1)
+        {
+            post.no_of_dislikes = post.no_of_dislikes - 1;
+            user.comments_disliked.splice(user.comments_disliked.indexOf(req.params.id),1);
+        }
+
+        User.update({_id:req.user._id},user,function(e){
+            if (e) {
+                console.log(e);
+            } else {
+                Comment.update({_id: req.params.id}, post, function (err1) {
+                    if (err1) {
+                        console.log(err1);
+                    } else {
+                        res.redirect('/main/' + post.post_id + '/comments');
+                    }
+                })
+            }
+        })
     })
 });
 
+router.get('/:id/commentDislike', ensureAuthenticated, function (req,res,next) {
+    let user=req.user;
+    Comment.findById(req.params.id,function(err,post) {
+        if (user.comments_disliked.indexOf(req.params.id) === -1)
+        {
+            post.no_of_dislikes = post.no_of_dislikes + 1;
+            user.comments_disliked.push(req.params.id);
+        }
+
+        if (user.comments_liked.indexOf(req.params.id) !== -1)
+        {
+            post.no_of_likes = post.no_of_likes - 1;
+            user.comments_liked.splice(user.comments_liked.indexOf(req.params.id),1);
+        }
+
+        User.update({_id:req.user._id},user,function(e){
+            if (err) {
+                console.log(err);
+            } else {
+                Comment.update({_id: req.params.id}, post, function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.redirect('/main/' + post.post_id + '/comments');
+                    }
+                })
+            }
+        })
+
+    })
+})
 function ensureAuthenticated(req,res,next)
 {
     if(req.isAuthenticated()) {

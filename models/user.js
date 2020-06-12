@@ -17,6 +17,14 @@ const UserSchema = mongoose.Schema({
     password:{
         type:String,
         required:true
+    },
+    posts_liked:{
+        type:Array,
+        required:false
+    },
+    posts_disliked:{
+        type:Array,
+        required:false
     }
 });
 

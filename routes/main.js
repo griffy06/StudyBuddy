@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 let Course=require('../models/course');
 let Post=require('../models/post');
+let User=require('../models/user');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
@@ -29,7 +30,7 @@ router.get('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                                 return;
                             }
                             else{
-                                res.render('posts', {post: post, course:course, current_course:req.params.id});
+                                res.render('posts', {post: post, course:course, current_course:req.params.id, user:req.user});
                                 return;
                             }
                         });
@@ -101,7 +102,8 @@ router.post('/course/:id/create', ensureAuthenticated, function (req,res,next) {
 });
 
 router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
-    console.log(req.body.searchBy);
+    //console.log(req.body.searchBy);
+    console.log('hello');
     let tags = req.body.searchBy.split(',');
     let arr=[];
     Post.find(function (err,post) {
@@ -113,7 +115,6 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                             if (temp.tag.indexOf(tag) !== -1) {
                                 arr.push(temp);
                             }
-
                     })
             })
             let arrUnique = [];
@@ -135,7 +136,7 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                             return;
                         }
                         else{
-                            res.render('posts', {post: arrUnique, course:course, current_course:req.params.id});
+                            res.render('posts', {post: arrUnique, course:course, current_course:req.params.id, user:req.user});
                             return;
                         }
                     });
@@ -212,7 +213,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                 console.log(err);
             } else {
                 req.flash('success', 'Successfully Updated Profile!');
-                res.redirect('/main');
+                res.redirect('/main/editProfile');
             }
         });
     }
@@ -230,7 +231,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                             console.log(err);
                         } else {
                             req.flash('success', 'Successfully Updated Profile!');
-                            res.redirect('/main');
+                            res.redirect('/main/editProfile');
                         }
                     });
                 }
@@ -252,6 +253,70 @@ router.get('/profile/myposts', ensureAuthenticated, function (req,res,next) {
         }
     })
 });
+
+router.get('/:id/like', ensureAuthenticated, function (req,res,next) {
+    let user=req.user;
+    Post.findById(req.params.id,function(err,post) {
+        if (user.posts_liked.indexOf(req.params.id) === -1)
+        {
+            post.no_of_likes = post.no_of_likes + 1;
+            user.posts_liked.push(req.params.id);
+        }
+
+        if (user.posts_disliked.indexOf(req.params.id) !== -1)
+        {
+                post.no_of_dislikes = post.no_of_dislikes - 1;
+                user.posts_disliked.splice(user.posts_disliked.indexOf(req.params.id),1);
+        }
+
+        User.update({_id:req.user._id},user,function(e){
+            if (err) {
+                console.log(err);
+            } else {
+                Post.update({_id: req.params.id}, post, function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.redirect('/main/course/' + post.course_id + '/view');
+                    }
+                })
+            }
+        })
+
+    })
+});
+
+router.get('/:id/dislike', ensureAuthenticated, function (req,res,next) {
+    let user=req.user;
+    Post.findById(req.params.id,function(err,post) {
+        if (user.posts_disliked.indexOf(req.params.id) === -1)
+        {
+            post.no_of_dislikes = post.no_of_dislikes + 1;
+            user.posts_disliked.push(req.params.id);
+        }
+
+        if (user.posts_liked.indexOf(req.params.id) !== -1)
+        {
+            post.no_of_likes = post.no_of_likes - 1;
+            user.posts_liked.splice(user.posts_liked.indexOf(req.params.id),1);
+        }
+
+        User.update({_id:req.user._id},user,function(e){
+            if (err) {
+                console.log(err);
+            } else {
+                Post.update({_id: req.params.id}, post, function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.redirect('/main/course/' + post.course_id + '/view');
+                    }
+                })
+            }
+        })
+
+    })
+})
 
 function ensureAuthenticated(req,res,next)
 {

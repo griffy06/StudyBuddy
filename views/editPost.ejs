@@ -28,33 +28,18 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Semester</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="/main/1">Semester 1</a>
-                    <a class="dropdown-item" href="/main/2">Semester 2</a>
-                    <a class="dropdown-item" href="/main/3">Semester 3</a>
-                    <a class="dropdown-item" href="/main/4">Semester 4</a>
-                    <a class="dropdown-item" href="/main/5">Semester 5</a>
-                    <a class="dropdown-item" href="/main/6">Semester 6</a>
-                    <a class="dropdown-item" href="/main/7">Semester 7</a>
-                    <a class="dropdown-item" href="/main/8">Semester 8</a>
-                </div>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <% course.forEach(function(item){%>
-                        <a class="dropdown-item" href="/main/course/<%= item.course_id%>/view"><%= item.course_name%></a>
-                    <%});%>
-                </div>
             </li>
         </ul>
         <ul class="navbar-nav rounded-right">
             <li class="nav-item">
                 <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
             </li>
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>-->
+            <!--            </li>-->
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
@@ -63,26 +48,17 @@
 </nav>
 <%- messages('message', locals) %>
 <div class="container">
-    <h2 align="center">New Post</h2>
-    <form method="post" action="/main/course/<%= current_course%>/create" enctype="multipart/form-data">
+    <h2 align="center"><%= title%></h2>
+    <form method="post" action="/main/profile/myposts/<%= post._id%>/edit">
         <div class="form-group">
             <label for="content">Content</label>
-            <textarea type="text" class="form-control" id="content" name="content" placeholder="Enter content" ></textarea>
+            <textarea type="text" class="form-control" id="content" name="content"><%= post.content%></textarea>
         </div>
         <div class="form-group">
             <label for="tags">Tags</label>
-            <textarea type="text" class="form-control" id="tags" name="tags" placeholder="Enter all tags separated by comma" ></textarea>
+            <textarea type="text" class="form-control" id="tags" name="tags" ><%= post.tag%></textarea>
         </div>
-
-
-
-        <div>
-            <label>Select multiple files:</label>
-            <input type="file" name="files" multiple />
-        </div>
-
-            <button type="submit" class="btn-dark">Add</button>
-
+        <button type="submit" class="btn-dark">Save Changes</button>
     </form>
 </div>
 <script src='/bower_components/jquery/dist/jquery.js'></script>

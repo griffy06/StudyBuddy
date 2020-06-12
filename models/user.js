@@ -25,6 +25,10 @@ const UserSchema = mongoose.Schema({
     posts_disliked:{
         type:Array,
         required:false
+    },
+    posts_bookmarked:{
+        type:Array,
+        required:false
     }
 });
 

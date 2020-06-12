@@ -183,21 +183,8 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
     })
 });
 router.get('/profile', ensureAuthenticated, function (req,res,next) {
-        console.log(req.user);
-        res.render('showProfile',{user:req.user});
-});
-
-
-router.get('/:id', ensureAuthenticated, function (req,res,next) {
-    Course.find({sem_id:req.params.id},{}, function (err, course) {
-        if (err) {
-            console.log('No such entry');
-            return;
-        } else {
-            //console.log(course);
-            res.render('courses', {course: course, sem:req.params.id});
-        }
-    });
+        //console.log(req.user);
+        res.render('showProfile',{user:req.user,viewer:'me'});
 });
 
 router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
@@ -214,10 +201,12 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
             }
             else{
                 post.forEach(function (item) {
+                    item.authorid=item.authorid;
                     item.author = req.body.name;
                     item.no_of_likes=item.no_of_likes;
                     item.no_of_dislikes=item.no_of_dislikes;
                     item.content=item.content;
+                    item.tag=item.tag;
                     item.save(function (err) {
                         if (err) {
                             console.log(err);
@@ -238,8 +227,33 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
     if(req.body.username=='') {
         req.user.username = req.user.username;
     }
+
     else{
-        req.user.username = req.body.username;
+            var username=req.user.username;
+            req.user.username = req.body.username;
+            console.log(req.body.username);
+            Post.find({authorid:username},{},function(err,post){
+                console.log('this is'+post);
+                if(err){
+                    return;
+                }
+                else{
+                    post.forEach(function (item) {
+                        console.log(post);
+                        item.authorid= req.body.username;
+                        item.author = item.author;
+                        item.no_of_likes=item.no_of_likes;
+                        item.no_of_dislikes=item.no_of_dislikes;
+                        item.content=item.content;
+                        item.tag=item.tag;
+                        item.save(function (err) {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                    })
+                }
+            })
     }
 
     if(req.body.password=='') {
@@ -248,7 +262,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                 console.log(err);
             } else {
                 req.flash('success', 'Successfully Updated Profile!');
-                res.redirect('/main/editProfile');
+                res.redirect('/main/profile');
             }
         });
     }
@@ -266,7 +280,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                             console.log(err);
                         } else {
                             req.flash('success', 'Successfully Updated Profile!');
-                            res.redirect('/main/editProfile');
+                            res.redirect('/main/profile');
                         }
                     });
                 }
@@ -275,20 +289,88 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
     }
 })
 
+router.get('/:id', ensureAuthenticated, function (req,res,next) {
+    Course.find({sem_id:req.params.id},{}, function (err, course) {
+        if (err) {
+            console.log('No such entry');
+            return;
+        } else {
+            //console.log(course);
+            res.render('courses', {course: course, sem:req.params.id});
+        }
+    });
+});
+
+
 router.get('/profile/myposts', ensureAuthenticated, function (req,res,next) {
-    console.log(req.user.name);
-    Post.find({author:req.user.name},{},function(err,post){
+    //console.log(req.user.username);
+    Post.find({authorid:req.user.username},{},function(err,post){
         console.log(post);
         if(err){
             return;
         }
         else{
-            res.render('showMyPosts',{post:post});
+            res.render('showMyPosts',{user:req.user,post:post,title:'My Posts',viewer:'me'});
             return;
         }
     })
 });
+router.get('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,next) {
+    //console.log(req.user.username);
+    Post.findById(req.params.id,{},function(err,post){
+        console.log(post);
+        if(err){
+            return;
+        }
+        else{
+            res.render('editPost',{post:post,title:'Edit Post'});
+            return;
+        }
+    })
+});
+router.post('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,next) {
+    //console.log(req.user.username);
+    Post.findById(req.params.id,{},function(err,post){
+        post.content=req.body.content;
+        post.tag=req.body.tags;
+        if(err){
+            return;
+        }
+        else{
+            post.save(function(e){
+                if(e){
+                    console.log(e);
+                }
+                res.redirect('/main/profile/myposts');
+                return;
+            })
+        }
+    })
+});
+router.get('/profile/myposts/:id/delete', ensureAuthenticated, function (req,res,next) {
+    //console.log(req.user.username);
+    Post.remove({_id:req.params.id},function(err){
+        if(err){
+            console.log(err);
+            return;
+        }
+        else{
+            let user=req.user;
+            user.posts_bookmarked.splice(user.posts_bookmarked.indexOf(req.params.id),1);
+            user.posts_liked.splice(user.posts_liked.indexOf(req.params.id),1);
+            user.posts_disliked.splice(user.posts_disliked.indexOf(req.params.id),1);
+            User.update({_id:req.user._id},user,function(err){
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.redirect('/main/profile/myposts');
+                    return;
+                }
+            })
+        }
+    })
 
+});
 router.get('/:id/like', ensureAuthenticated, function (req,res,next) {
     let user=req.user;
     Post.findById(req.params.id,function(err,post) {
@@ -352,6 +434,94 @@ router.get('/:id/dislike', ensureAuthenticated, function (req,res,next) {
 
     })
 })
+router.get('/:id/bookmark', ensureAuthenticated, function (req,res,next) {
+    let user=req.user;
+    Post.findById(req.params.id,function(err,post) {
+        if (user.posts_bookmarked.indexOf(req.params.id) === -1)
+        {
+            console.log('here');
+            user.posts_bookmarked.push(req.params.id);
+        }
+
+        else
+        {
+            user.posts_bookmarked.splice(user.posts_bookmarked.indexOf(req.params.id),1);
+        }
+        User.update({_id:req.user._id},user,function(e){
+            if (err) {
+                console.log(err);
+            } else {
+                Post.update({_id: req.params.id}, post, function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.redirect('/main/course/' + post.course_id + '/view');
+                    }
+                })
+            }
+        })
+
+    })
+});
+router.get('/profile/bookmarks', ensureAuthenticated, function (req,res) {
+    //console.log(req.user.username);
+    var arr=[];
+    Post.find(function(err,post){
+        post.forEach(function(item){
+            req.user.posts_bookmarked.forEach(function(item1){
+                    if(item1==item._id)
+                    arr.push(item);
+                })
+            })
+        res.render('showMyPosts',{user:req.user,viewer:'me',post:arr,title:'Favourite Posts'});
+        return;
+        })
+});
+
+router.get('/profile/bookmarks/:id/delete', ensureAuthenticated, function (req,res) {
+    let user=req.user;
+    user.posts_bookmarked.splice(user.posts_bookmarked.indexOf(req.params.id),1);
+    User.update({_id:req.user._id},user,function(err){
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect('/main/profile/bookmarks');
+        }
+    })
+});
+
+router.get('/:id/viewAuthor', ensureAuthenticated, function (req,res) {
+    User.find({username:req.params.id},function (err,user) {
+        if(err)
+        {
+            console.log(err);
+        }
+        else {
+            res.render('showProfile',{user:user[0], viewer:'other'});
+        }
+    })
+});
+
+router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
+    User.find({username:req.params.id},function (err,user) {
+        if(err)
+        {
+            console.log(err);
+        }
+        else {
+            Post.find({authorid:user[0].username},{},function(err,post){
+                console.log(post);
+                if(err){
+                    return;
+                }
+                else{
+                    res.render('showMyPosts',{user:user[0],post:post,title:'All Posts by '+user[0].name,viewer:'other'});
+                    return;
+                }
+            })
+        }
+    })
+});
 
 function ensureAuthenticated(req,res,next)
 {

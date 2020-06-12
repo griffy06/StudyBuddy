@@ -62,6 +62,9 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/main">Home<span class="sr-only">(current)</span></a>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Semester</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -87,14 +90,14 @@
         <ul class="navbar-nav rounded-right">
             <form method="post" class="form-inline mt-2 mt-md-0" action="/main/course/<%= current_course%>/view">
                 <input id="searchBy" name="searchBy" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <button class="btn btn-group-sm btn-circle waves-effect" type="submit"><i class="fa fa-search"></i></button>
             </form>
             <li class="nav-item">
                 <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>
-            </li>
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>-->
+<!--            </li>-->
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
@@ -110,7 +113,9 @@
             <li class="list-group-item bg-dark post">
                 <p style="color: white" align="left">
                     <%= item.content%><br>
-                    Written by: <%= item.author%><br><br><br>
+                    Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">
+                        @<%= item.authorid%>
+                    </a><br><br><br>
                 </p>
                 <a href="/main/<%= item._id%>/like"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
                         <% if(user.posts_liked.indexOf(item._id)!==-1){%>
@@ -125,7 +130,14 @@
                             <%}else{%>
                                 <i class="fa fa-thumbs-down"></i>
                             <%}%>
-                    </button></a>&nbsp<%= item.no_of_dislikes%>
+                    </button></a>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/bookmark"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.posts_bookmarked.indexOf(item._id)===-1){%>
+                            <i class="fa fa-star-o"></i>
+                        <%}else{%>
+                            <i class="fa fa-star"></i>
+                        <%}%>
+                    </button></a>
             </li>
         </div>
         <br>

@@ -36,31 +36,41 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
+                <a class="nav-link" href="/main">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <% if(viewer=='me'){%>
+            <li class="nav-item">
                 <a class="nav-link" href="/main/profile/myposts">My Posts<span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/main/profile/bookmarks">Favourite Posts<span class="sr-only">(current)</span></a>
+            </li>
+            <%}%>
         </ul>
         <ul class="navbar-nav rounded-right">
-            <li class="nav-item">
-                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>
-            </li>
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>-->
+<!--            </li>-->
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
         </ul>
     </div>
 </nav>
-<h1 align="center" style="color: white">Profile Details</h1>
 <%- messages('message', locals) %>
+<h1 align="center" style="color: white">Profile Details</h1>
 <div class="login">
     <form method="post" action="/main/editProfile">
-        <label style="color:white">
-            UserName
-        </label>
-        <input type="text" name="username" placeholder="<%= user.username%>"/>
+        <% if(viewer=='me'){%>
         <label style="color:white">
             Name
         </label>
         <input type="text" name="name" placeholder="<%= user.name%>"/>
+
+        <label style="color:white">
+            UserName
+        </label>
+        <input type="text" name="username" placeholder="<%= user.username%>"/>
         <label style="color:white">
             Email
         </label>
@@ -68,10 +78,35 @@
         <label style="color:white">
             Password
         </label>
-        <input type="password" name="password" placeholder="********"/><br>
+        <input type="password" name="password" placeholder="********"/><br><br>
         <button type="submit" class="btn btn-primary btn-block btn-large">Save Changes</button>
+        <%}%>
+            <% if(viewer=='other'){%>
+                <label style="color:white">
+                    Name
+                </label>
+                <input type="text" name="name" placeholder="<%= user.name%>" disabled/>
+
+                <label style="color:white">
+                    UserName
+                </label>
+            <input type="text" name="username" placeholder="<%= user.username%>" disabled/>
+            <label style="color:white">
+                Email
+            </label>
+                <input type="text" name="email" placeholder="<%= user.email%>" disabled/>
+            <%}%>
     </form>
+    <br>
+    <br>
+    <div class="container" align="center">
+        <% if(viewer=='other'){%>
+            <a href="/main/<%= user.username%>/AllPosts"><button type="button" class="btn btn-primary btn-group-sm">Posts By <%= user.name%></button></a>
+        <%}%>
+    </div>
+
 </div>
+
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>
 </body>

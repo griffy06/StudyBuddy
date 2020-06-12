@@ -14,23 +14,6 @@
             $("#messages").fadeOut().empty();
         }, 1000);
     </script>
-    <script>
-        function myFunction() {
-            var dots = document.getElementById("dots");
-            var moreText = document.getElementById("more");
-            var btnText = document.getElementById("myBtn");
-
-            if (dots.style.display === "none") {
-                dots.style.display = "inline";
-                btnText.innerHTML = "Read more";
-                moreText.style.display = "none";
-            } else {
-                dots.style.display = "none";
-                btnText.innerHTML = "Read less";
-                moreText.style.display = "inline";
-            }
-        }
-    </script>
     <style>
         body {
             background-color: #a4a5a7;
@@ -45,7 +28,28 @@
             height: 40px;
             border-radius: 20px ;
         }
+        .fixed_button{
+            position: fixed;
+            bottom: 5px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px ;
+            z-index: 99;
+            -webkit-transform: translate3d(0,0,0);
+            -webkit-transition: all .25s ease;
+            -moz-transition: all .25s ease;
+            -ms-transition: all .25s ease;
+            -o-transition: all .25s ease;
+            transition: all .25s ease;
+            text-align: center;
+        }
     </style>
+    <script>
+        function myFunction(x) {
+            x.classList.toggle("fa-thumbs-down");
+        }
+    </script>
 
 </head>
 <body>
@@ -62,17 +66,9 @@
             </li>
         </ul>
         <ul class="navbar-nav rounded-right">
-            <% if(viewer=='me'){%>
             <li class="nav-item">
                 <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
             </li>
-                <%}%>
-                <% if(viewer=='other'){%>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/main/<%= user.username%>/viewAuthor">Go back to Profile<span class="sr-only">(current)</span></a>
-                    </li>
-                <%}%>
-
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
@@ -82,29 +78,21 @@
 <%- messages('message', locals) %>
 <br>
 <div class="container">
-    <h1 align="center" style="color: white"><%= title%></h1><br>
-    <% if(post!=undefined){post.forEach(function(item){ %>
-        <div class="post" align="center">
+    <h1 align="center" style="color: white">Comments</h1><br>
+    <% if(comments!=undefined){comments.forEach(function(item){ %>
+        <div class="post" align="center" style="color: white">
             <li class="list-group-item bg-dark post">
                 <p style="color: white" align="left">
                     <%= item.content%><br>
-                    Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a><br>
-                    <i class="fa fa-thumbs-up"></i>&nbsp<%= item.no_of_likes%> &nbsp&nbsp&nbsp
-                    <i class="fa fa-thumbs-down"></i>&nbsp<%= item.no_of_dislikes%>
+                    Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">
+                        @<%= item.authorid%>
+                    </a><br><br><br>
                 </p>
-                <% if(viewer=='me'){%>
-                <% if(title=='My Posts'){%>
-                <a href="/main/profile/myposts/<%= item._id%>/edit"><button type="button" class="btn btn-success btn-group-sm">Edit</button></a>
-                <a href="/main/profile/myposts/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-group-sm">Delete</button></a>
-                <%}%>
-                <% if(title=='Favourite Posts'){%>
-                    <a href="/main/profile/bookmarks/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-group-sm">Delete</button></a>
-                <%}%>
-                <%}%>
             </li>
         </div>
         <br>
     <%});}%>
+    <br>
 </div>
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>

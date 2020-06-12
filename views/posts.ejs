@@ -14,7 +14,6 @@
             $("#messages").fadeOut().empty();
         }, 1000);
     </script>
-
     <style>
         body {
             background-color: #a4a5a7;
@@ -131,6 +130,8 @@
                                 <i class="fa fa-thumbs-down"></i>
                             <%}%>
                     </button></a>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/comments"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <i class="fa fa-comment"></i></button></a>&nbsp<%= item.no_of_comments%>&nbsp &nbsp &nbsp
                 <a href="/main/<%= item._id%>/bookmark"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
                         <% if(user.posts_bookmarked.indexOf(item._id)===-1){%>
                             <i class="fa fa-star-o"></i>

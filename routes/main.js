@@ -4,6 +4,7 @@ let Course=require('../models/course');
 let Post=require('../models/post');
 let User=require('../models/user');
 const bcrypt = require('bcryptjs');
+let Com=require('../models/comment');
 const passport = require('passport');
 
 router.get('/', ensureAuthenticated, function (req,res,next) {
@@ -69,6 +70,7 @@ router.post('/course/:id/create', ensureAuthenticated, function (req,res,next) {
     p.author=req.user.name;
     p.authorid=req.user.username;
     p.content=req.body.content;
+    p.no_of_comments=0;
     p.tag = req.body.tags.split(',');
 
     Course.find({course_id:req.params.id},{},function(err1,course1){
@@ -171,6 +173,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                     item.author = req.body.name;
                     item.no_of_likes=item.no_of_likes;
                     item.no_of_dislikes=item.no_of_dislikes;
+                    item.no_of_comments=item.no_of_comments;
                     item.content=item.content;
                     item.tag=item.tag;
                     item.save(function (err) {
@@ -210,6 +213,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                         item.author = item.author;
                         item.no_of_likes=item.no_of_likes;
                         item.no_of_dislikes=item.no_of_dislikes;
+                        item.no_of_comments=item.no_of_comments;
                         item.content=item.content;
                         item.tag=item.tag;
                         item.save(function (err) {
@@ -486,6 +490,12 @@ router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
                 }
             })
         }
+    })
+});
+router.get('/:id/comments', ensureAuthenticated, function (req,res) {
+    Com.find({post_id: req.params.id},{},function(err,comments){
+        console.log(comments);
+        res.render('comments',{comments:comments});
     })
 });
 

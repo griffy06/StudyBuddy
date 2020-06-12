@@ -23,15 +23,11 @@
             opacity:90%;
             height: 100%;
         }
-        .btn-circle{
-            width: 40px;
-            height: 40px;
-            border-radius: 20px ;
-        }
+
         .fixed_button{
             position: fixed;
-            bottom: 5px;
-            right: 10px;
+            bottom: 15px;
+            right: 80px;
             width: 50px;
             height: 50px;
             border-radius: 25px ;
@@ -44,6 +40,13 @@
             transition: all .25s ease;
             text-align: center;
         }
+        .fixed_box{
+            width: 1000px;
+            height: 55px;
+            position: fixed;
+            bottom: 10px;
+            right: 145px;
+        }
     </style>
     <script>
         function myFunction(x) {
@@ -52,7 +55,7 @@
     </script>
 
 </head>
-<body>
+<form>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
     <a class="navbar-brand" href="/">StudyBuddy</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,12 +91,32 @@
                         @<%= item.authorid%>
                     </a><br><br><br>
                 </p>
+                <a href="/main/<%= item._id%>/commentLike"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.comments_liked.indexOf(item._id)!==-1){%>
+                            <i class="fa fa-thumbs-up"></i>
+                        <%}else{%>
+                            <i class="fa fa-thumbs-o-up"></i>
+                        <%}%>
+                    </button></a>&nbsp<%= item.no_of_likes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/commentDislike"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.comments_disliked.indexOf(item._id)===-1){%>
+                            <i class="fa fa-thumbs-o-down"></i>
+                        <%}else{%>
+                            <i class="fa fa-thumbs-down"></i>
+                        <%}%>
+                    </button></a>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
             </li>
         </div>
         <br>
     <%});}%>
     <br>
 </div>
+<form method="post" action="/main/post_it">
+    <div class="form-group">
+        <textarea type="text" class="form-control fixed_box" id="content" name="content" placeholder="Comment here!" ></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary fixed_button"><i class="fa fa-paper-plane"></i></button>
+</form>
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>
 </body>

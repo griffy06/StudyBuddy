@@ -4,7 +4,7 @@ let Course=require('../models/course');
 let Post=require('../models/post');
 let User=require('../models/user');
 const bcrypt = require('bcryptjs');
-let Com=require('../models/comment');
+let Comment=require('../models/comment');
 const passport = require('passport');
 const crypto = require('crypto');
 const multer = require('multer');
@@ -98,6 +98,7 @@ router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50),
         p.no_of_dislikes=0;
         p.no_of_likes=0;
         p.author=req.user.name;
+        p.authorid=req.user.username;
         p.no_of_comments=0;
         p.content=req.body.content;
         p.tag = req.body.tags.split(',');
@@ -527,9 +528,28 @@ router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
     })
 });
 router.get('/:id/comments', ensureAuthenticated, function (req,res) {
-    Com.find({post_id: req.params.id},{},function(err,comments){
-        console.log(comments);
-        res.render('comments',{comments:comments});
+    Comment.find({post_id: req.params.id},{},function(err,comments){
+        //console.log(comments);
+        res.render('comments',{user:req.user,comments:comments});
+    })
+});
+
+router.post('/post_it', ensureAuthenticated, function (req,res) {
+    let c=new Comment();
+    console.log('rohini');
+    c.post_id=req.params.id;
+    c.no_of_likes=0;
+    c.no_of_dislikes=0;
+    c.authorid=req.user.username;
+    c.author=req.user.name;
+    c.content=req.body.content;
+    c.save(function (err) {
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.redirect('main/'+c.post_id+'/comments');
+        }
     })
 });
 

@@ -534,7 +534,7 @@ router.get('/:id/comments', ensureAuthenticated, function (req,res) {
     })
 });
 
-router.post('/post_it', ensureAuthenticated, function (req,res) {
+router.post('/post_it/:id', ensureAuthenticated, function (req,res) {
     let c=new Comment();
     console.log('rohini');
     c.post_id=req.params.id;

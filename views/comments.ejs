@@ -111,7 +111,7 @@
     <%});}%>
     <br>
 </div>
-<form method="post" action="/main/post_it">
+<form method="post" action="/main/post_it/<%= comments[0].post_id%>">
     <div class="form-group">
         <textarea type="text" class="form-control fixed_box" id="content" name="content" placeholder="Comment here!" ></textarea>
     </div>

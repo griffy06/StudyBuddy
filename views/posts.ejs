@@ -7,22 +7,50 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <title>main</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         setTimeout(function() {
             $("#messages").fadeOut().empty();
         }, 1000);
     </script>
+
     <style>
         body {
             background-color: #a4a5a7;
             background: linear-gradient(180deg, #76777a 0%, #39393c 37%, #000108 100%) fixed;
         }
         .post{
-            opacity:70%;
+            opacity:90%;
             height: 100%;
         }
+        .btn-circle{
+            width: 40px;
+            height: 40px;
+            border-radius: 20px ;
+        }
+        .fixed_button{
+            position: fixed;
+            bottom: 5px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px ;
+            z-index: 99;
+            -webkit-transform: translate3d(0,0,0);
+            -webkit-transition: all .25s ease;
+            -moz-transition: all .25s ease;
+            -ms-transition: all .25s ease;
+            -o-transition: all .25s ease;
+            transition: all .25s ease;
+            text-align: center;
+        }
     </style>
+    <script>
+        function myFunction(x) {
+            x.classList.toggle("fa-thumbs-down");
+        }
+    </script>
 
 </head>
 <body>
@@ -78,19 +106,32 @@
 <div class="container">
         <h1 align="center" style="color: white"> Course: <%= current_course%></h1><br>
         <% if(post!=undefined){post.forEach(function(item){ %>
-        <div class="post" align="center">
+        <div class="post" align="center" style="color: white">
             <li class="list-group-item bg-dark post">
-                <p style="color: white">
+                <p style="color: white" align="left">
                     <%= item.content%><br>
-                    Written by: <%= item.author%><br>
-                    Likes:  <%= item.no_of_likes%>  Dislikes: <%= item.no_of_dislikes%>
+                    Written by: <%= item.author%><br><br><br>
                 </p>
+                <a href="/main/<%= item._id%>/like"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.posts_liked.indexOf(item._id)!==-1){%>
+                            <i class="fa fa-thumbs-up"></i>
+                                <%}else{%>
+                                <i class="fa fa-thumbs-o-up"></i>
+                                <%}%>
+                    </button></a>&nbsp<%= item.no_of_likes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/dislike"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.posts_disliked.indexOf(item._id)===-1){%>
+                        <i class="fa fa-thumbs-o-down"></i>
+                            <%}else{%>
+                                <i class="fa fa-thumbs-down"></i>
+                            <%}%>
+                    </button></a>&nbsp<%= item.no_of_dislikes%>
             </li>
         </div>
         <br>
         <%});}%>
      <br>
-    <a href="/main/course/<%= current_course%>/create"><button type="button" class="btn btn-outline-primary btn-rounded waves-effect">Create Post</button></a>
+    <a href="/main/course/<%= current_course%>/create"><button type="button" class="btn btn-primary btn-group-sm waves-effect fixed_button"><i class="fa fa-pencil" style="font-size:25px"></i></button></a>
 </div>
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>

@@ -439,7 +439,7 @@ router.get('/profile/bookmarks', ensureAuthenticated, function (req,res) {
                     arr.push(item);
                 })
             })
-        res.render('showMyPosts',{post:arr,title:'Favourite Posts'});
+        res.render('showMyPosts',{user:req.user,viewer:'me',post:arr,title:'Favourite Posts'});
         return;
         })
 });
@@ -475,7 +475,7 @@ router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
             console.log(err);
         }
         else {
-            Post.find({authorid:user.username},{},function(err,post){
+            Post.find({authorid:user[0].username},{},function(err,post){
                 console.log(post);
                 if(err){
                     return;

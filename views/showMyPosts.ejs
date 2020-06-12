@@ -19,7 +19,7 @@
             background: linear-gradient(180deg, #76777a 0%, #39393c 37%, #000108 100%) fixed;
         }
         .post{
-            opacity:70%;
+            opacity:90%;
             height: 100%;
         }
     </style>
@@ -65,7 +65,7 @@
             <li class="list-group-item bg-dark post">
                 <p style="color: white" align="left">
                     <%= item.content%><br>
-                    Written by: <%= item.author%> @<%= item.authorid%><br>
+                    Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a><br>
                     Likes:  <%= item.no_of_likes%>  Dislikes: <%= item.no_of_dislikes%>
                 </p>
                 <% if(viewer=='me'){%>

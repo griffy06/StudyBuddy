@@ -67,6 +67,7 @@ router.post('/course/:id/create', ensureAuthenticated, function (req,res,next) {
     p.no_of_dislikes=0;
     p.no_of_likes=0;
     p.author=req.user.name;
+    p.authorid=req.user.username;
     p.content=req.body.content;
     p.tag = req.body.tags.split(',');
 
@@ -152,19 +153,6 @@ router.get('/profile', ensureAuthenticated, function (req,res,next) {
         res.render('showProfile',{user:req.user});
 });
 
-
-router.get('/:id', ensureAuthenticated, function (req,res,next) {
-    Course.find({sem_id:req.params.id},{}, function (err, course) {
-        if (err) {
-            console.log('No such entry');
-            return;
-        } else {
-            //console.log(course);
-            res.render('courses', {course: course, sem:req.params.id});
-        }
-    });
-});
-
 router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
     if(req.body.name=='') {
         req.user.name = req.user.name;
@@ -213,7 +201,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                 console.log(err);
             } else {
                 req.flash('success', 'Successfully Updated Profile!');
-                res.redirect('/main/editProfile');
+                res.redirect('/main/profile');
             }
         });
     }
@@ -240,9 +228,22 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
     }
 })
 
+router.get('/:id', ensureAuthenticated, function (req,res,next) {
+    Course.find({sem_id:req.params.id},{}, function (err, course) {
+        if (err) {
+            console.log('No such entry');
+            return;
+        } else {
+            //console.log(course);
+            res.render('courses', {course: course, sem:req.params.id});
+        }
+    });
+});
+
+
 router.get('/profile/myposts', ensureAuthenticated, function (req,res,next) {
-    console.log(req.user.name);
-    Post.find({author:req.user.name},{},function(err,post){
+    //console.log(req.user.username);
+    Post.find({authorid:req.user.username},{},function(err,post){
         console.log(post);
         if(err){
             return;

@@ -27,7 +27,10 @@ const PostSchema = mongoose.Schema({
         type:Number,
         required:true
     },
-
+    authorid:{
+        type:String,
+        required:true
+    },
     tag:{
         type: Array,
         required: true

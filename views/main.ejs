@@ -17,51 +17,6 @@
     </script>
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-transparent">
-    <a class="navbar-brand" href="/">StudBuddy</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-            <!--            <li class="nav-item active">-->
-            <!--                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>-->
-            <!--            </li>-->
-<!--            <li class="nav-item dropdown">-->
-<!--                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Semester</a>-->
-<!--                <div class="dropdown-menu" aria-labelledby="dropdown01">-->
-<!--                    <a class="dropdown-item" href="/main/1">Semester 1</a>-->
-<!--                    <a class="dropdown-item" href="/main/2">Semester 2</a>-->
-<!--                    <a class="dropdown-item" href="/main/3">Semester 3</a>-->
-<!--                    <a class="dropdown-item" href="/main/4">Semester 4</a>-->
-<!--                    <a class="dropdown-item" href="/main/5">Semester 5</a>-->
-<!--                    <a class="dropdown-item" href="/main/6">Semester 6</a>-->
-<!--                    <a class="dropdown-item" href="/main/7">Semester 7</a>-->
-<!--                    <a class="dropdown-item" href="/main/8">Semester 8</a>-->
-<!--                </div>-->
-<!--            </li>-->
-        </ul>
-        <ul class="navbar-nav rounded-right">
-            <!--            <li class="nav-item">-->
-            <!--                <a class="nav-link" href="/login">Login<span class="sr-only">(current)</span></a>-->
-            <!--            </li>-->
-
-            <!--            <li class="nav-item">-->
-            <!--                <a class="nav-link" href="/register">Register<span class="sr-only">(current)</span></a>-->
-            <!--            </li>-->
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
-            </li>
-        </ul>
-        <!--        <form class="form-inline my-2 my-lg-0">-->
-        <!--            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">-->
-        <!--            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>-->
-        <!--        </form>-->
-    </div>
-</nav>
-<%- messages('message', locals) %>
-<br>
 <div class="container">
     <ul class="bubbles">
         <li></li>
@@ -76,7 +31,6 @@
         <li></li>
     </ul>
 </div>
-
 <form class="container"><input type="radio" name="title" id="book1" /><input type="radio" name="title" id="book2" /><input type="radio" name="title" id="book3" /><input type="radio" name="title" id="book4" /><input type="radio" name="title" id="book5" /><input type="radio" name="title"
                                                                                                                                                                                                                                                                      id="book6" /><input type="radio" name="title" id="book7" /><input type="radio" name="title" id="book8" /><input type="radio" name="title" id="book9" /><input type="radio" name="title" id="book10" /><input type="radio" name="title" id="book11" />
     <div
@@ -242,31 +196,27 @@
             </div>
         </label><label class="block b16" for="book11"><div class="block-inner"><div class="back"></div><div class="bottom"></div><div class="front"><div class="spine">Add Ons</div></div><div class="left"></div><div class="right" data-title="The Side Dish"><div class="cover"></div><div class="contents"><h1>Take Me To: </h1><a href="#"><button align="center" type="button" class="btn btn-sm btn-primary"> The Absolutely Unnecessary &raquo;</button></a></div></div><div class="top"></div></div></label></div>
     <input type="reset" value="Try Another" /></form>
-<!--<div class="container">-->
-<!--    <div class="jumbotron text-center">-->
-<!--        <h1 align="center"> Choose a Semester! </h1><br>-->
-<!--        <p>-->
-<!--            <a href="/main/1"><button align="center" type="button" class="btn btn-sm btn-primary">Semester 1 &raquo;</button></a>-->
-<!--            <a href="/main/2"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 2 &raquo;</button></a>-->
-<!--        </p>-->
-<!--        <p>-->
-<!--            <a href="/main/3"><button align="center" type="button" class="btn btn-sm btn-primary" >Semester 3 &raquo;</button></a>-->
-<!--            <a href="/main/4"><button align="center" type="button" class="btn btn-sm btn-primary" >Semester 4 &raquo;</button></a>-->
-<!--        </p>-->
-<!--        <p>-->
-<!--            <a href="/main/5"><button align="center" type="button" class="btn btn-sm btn-primary" >Semester 5 &raquo;</button></a>-->
-<!--            <a href="/main/6"><button align="center" type="button" class="btn btn-sm btn-primary" >Semester 6 &raquo;</button></a>-->
-<!--        </p>-->
+<nav class="navbar navbar-expand-md navbar-dark bg-transparent">
+    <a class="navbar-brand" href="/">StudBuddy</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-<!--        <p>-->
-<!--            <a href="/main/7"><button align="center" type="button" class="btn btn-sm btn-primary" >Semester 7 &raquo;</button></a>-->
-<!--            <a href="/main/8"><button align="center" type="button" class="btn btn-sm btn-primary" >Semester 8 &raquo;</button></a>-->
-<!--        </p>-->
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
 
-<!--        &lt;!&ndash;    <form action="\logout"><button type="submit" class="btn-danger">Logout!</button></form>&ndash;&gt;-->
-<!--    </div>-->
-<!--</div>-->
-
+        </ul>
+        <ul class="navbar-nav rounded-right">
+            <li class="nav-item">
+                <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<%- messages('message', locals) %>
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>
 </body>

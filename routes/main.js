@@ -167,10 +167,12 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
             }
             else{
                 post.forEach(function (item) {
+                    item.authorid=item.authorid;
                     item.author = req.body.name;
                     item.no_of_likes=item.no_of_likes;
                     item.no_of_dislikes=item.no_of_dislikes;
                     item.content=item.content;
+                    item.tag=item.tag;
                     item.save(function (err) {
                         if (err) {
                             console.log(err);
@@ -191,8 +193,33 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
     if(req.body.username=='') {
         req.user.username = req.user.username;
     }
+
     else{
-        req.user.username = req.body.username;
+            var username=req.user.username;
+            req.user.username = req.body.username;
+            console.log(req.body.username);
+            Post.find({authorid:username},{},function(err,post){
+                console.log('this is'+post);
+                if(err){
+                    return;
+                }
+                else{
+                    post.forEach(function (item) {
+                        console.log(post);
+                        item.authorid= req.body.username;
+                        item.author = item.author;
+                        item.no_of_likes=item.no_of_likes;
+                        item.no_of_dislikes=item.no_of_dislikes;
+                        item.content=item.content;
+                        item.tag=item.tag;
+                        item.save(function (err) {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                    })
+                }
+            })
     }
 
     if(req.body.password=='') {
@@ -219,7 +246,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                             console.log(err);
                         } else {
                             req.flash('success', 'Successfully Updated Profile!');
-                            res.redirect('/main/editProfile');
+                            res.redirect('/main/profile');
                         }
                     });
                 }
@@ -254,7 +281,51 @@ router.get('/profile/myposts', ensureAuthenticated, function (req,res,next) {
         }
     })
 });
-
+router.get('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,next) {
+    //console.log(req.user.username);
+    Post.findById(req.params.id,{},function(err,post){
+        console.log(post);
+        if(err){
+            return;
+        }
+        else{
+            res.render('editPost',{post:post,title:'Edit Post'});
+            return;
+        }
+    })
+});
+router.post('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,next) {
+    //console.log(req.user.username);
+    Post.findById(req.params.id,{},function(err,post){
+        post.content=req.body.content;
+        post.tag=req.body.tags;
+        if(err){
+            return;
+        }
+        else{
+            post.save(function(e){
+                if(e){
+                    console.log(e);
+                }
+                res.redirect('/main/profile/myposts');
+                return;
+            })
+        }
+    })
+});
+router.get('/profile/myposts/:id/delete', ensureAuthenticated, function (req,res,next) {
+    //console.log(req.user.username);
+    Post.remove({_id:req.params.id},function(err){
+        if(err){
+            console.log(err);
+            return;
+        }
+        else{
+            res.redirect('/main/profile/myposts');
+            return;
+        }
+    })
+});
 router.get('/:id/like', ensureAuthenticated, function (req,res,next) {
     let user=req.user;
     Post.findById(req.params.id,function(err,post) {

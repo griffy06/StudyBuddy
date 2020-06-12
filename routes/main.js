@@ -259,7 +259,8 @@ function ensureAuthenticated(req,res,next)
         return next();
     }
     else {
-        console.log("here");
+        //console.log("here");
+        req.flash('danger','Not logged in!');
         res.redirect('/login');
     }
 }

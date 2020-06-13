@@ -26,7 +26,7 @@ const storage = new GridFsStorage({
                 const fileInfo = {
                     filename: filename,
                     bucketName: 'uploads',
-                    metadata: metadata?metadata:null
+                  //  metadata: metadata?metadata:null
                 };
                 resolve(fileInfo);
             });
@@ -60,8 +60,16 @@ router.get('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                                 return;
                             }
                             else{
-                                res.render('posts', {post: post, course:course, current_course:req.params.id, user:req.user});
-                                return;
+                                global.gfs.files.find().toArray(function (err,files) {
+                                    if(err) console.log(err);
+                                    else
+                                    {
+                                        //console.log(files);
+                                        res.render('posts', {files: files,post: post, course:course, current_course:req.params.id, user:req.user});
+                                        return;
+                                    }
+                                })
+
                             }
                         });
                     }
@@ -97,6 +105,7 @@ router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50),
         p.no_of_dislikes=0;
         p.no_of_likes=0;
         p.author=req.user.name;
+        p.authorid = req.user.username;
         p.content=req.body.content;
         p.tag = req.body.tags.split(',');
         Course.find({course_id:req.params.id},{},function(err1,course1){
@@ -112,18 +121,54 @@ router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50),
                     } else {
                         p.course_id=req.params.id;
                         p.sem_id=course1[0].sem_id;
+                        req.files.forEach(function (fileobj) {
+                          //  console.log(fileobj);
+                         //   console.log('----------');
+                         //   console.log(fileobj.id);
+                            p.fileField.push(fileobj.id);
+                        })
+                      //  console.log('----------');
+                      //  console.log(p.fileField);
                         p.save(function(err2){
                             if(err2){
                                 console.log(err2);
                             }
                             else{
-                                metadata = p._id;
-                                req.files.forEach(function(file){
-                                    file.metadata = req.user.id;
+
+                               // console.log(req.files);
+                              //  console.log('-----------------');
+                              //  metadata = p._id;
+                              /*  req.files.forEach(function(file){
+                                    global.gfs.files.find().toArray(function (err,files) {
+                                        if(err) console.log(err);
+                                        else
+                                        {
+                                            //console.log(files);
+                                            files.forEach(function (file2) {
+                                                console.log(file2);
+                                                if(file2.filename === file.filename)
+                                                {
+                                                    file2.metadata = metadata;
+                                                    file2.save(function (err) {
+                                                        if(err) console.log(err);
+                                                    });
+                                                }
+                                            })
+                                         //   res.render('posts', {files: files,post: post, course:course, current_course:req.params.id, user:req.user});
+                                         //   return;
+                                        }
+                                    })
+
+                                  /*  file.metadata = metadata;
                                     console.log("what");
                                     console.log(file.metadata);
-                                })
-
+                                    file.save(function (err) {
+                                        if(err) console.log(err);
+                                    });
+                                })*/
+                             /*   console.log('-------------');
+                                console.log(p.fileField);
+                                console.log('-------------');*/
                                  req.flash('success', 'Post created successfully!');
                                  return res.redirect('/main/course/'+req.params.id+'/view');
                          }
@@ -157,7 +202,7 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                 if(arrUnique.indexOf(arr_element)===-1)
                     arrUnique.push(arr_element);
             })
-            console.log(arrUnique);
+          //  console.log(arrUnique);
             Course.find({course_id:req.params.id},{},function(err1,course1) {
                 console.log(course1);
                 if (err1) {
@@ -533,5 +578,31 @@ function ensureAuthenticated(req,res,next)
         res.redirect('/login');
     }
 }
+
+router.get('/image/:filename', function (req,res) {
+    gfs.files.findOne({filename: req.params.filename}, function (err,file) {
+        if(!file || file.length===0){
+            return res.status(404).json({
+                err:'No file exists'
+            })
+        }
+
+        //check if image
+        if(file.contentType==='image/jpeg' || file.contentType==='image/jpg' || file.contentType==='image/png')
+        {
+            //read output to browser
+            const readStream = gfs.createReadStream(file.filename);
+            readStream.pipe(res);
+        }
+        else
+        {
+            return res.status(404).json({
+                err:'Not an image'
+            })
+        }
+    })
+
+
+})
 
 module.exports = router;

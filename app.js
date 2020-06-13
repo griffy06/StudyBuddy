@@ -93,12 +93,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-let gfs;
+global.gfs;
 
 db.once('open',()=>{
   //init stream
-  gfs = Grid(db.db, mongoose.mongo);
-  gfs.collection('uploads');
+  global.gfs = Grid(db.db, mongoose.mongo);
+  global.gfs.collection('uploads');
 })
 
 //create storage engine

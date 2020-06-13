@@ -117,6 +117,23 @@
                         @<%= item.authorid%>
                     </a><br><br><br>
                 </p>
+                <p>Attached files:</p>
+                <ul>
+                    <% item.fileField.forEach(function (file) {%>
+                    <%if(file!==null){%>
+                        <%files.forEach(function (file2) {%>
+                            <%if(file._id!==undefined && file._id.toString()===file2._id.toString()){%>
+                                <%if(file2.contentType=='image/png'){%>
+                                    <li><img width="200px" height="200px" src="\main\image\<%=file2.filename%>" alt="image"></li><br>
+                                <%}else{%>
+                                    <li><%=file2.filename%></li>
+                                <%}%>
+                            <%}%>
+
+                    <%})%>
+                    <%}%>
+                    <%})%>
+                </ul>
                 <a href="/main/<%= item._id%>/like"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
                         <% if(user.posts_liked.indexOf(item._id)!==-1){%>
                             <i class="fa fa-thumbs-up"></i>

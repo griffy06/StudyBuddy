@@ -34,6 +34,10 @@ const PostSchema = mongoose.Schema({
     tag:{
         type: Array,
         required: true
+    },
+    fileField:{
+        type: Array,
+        required:false
     }
 });
 

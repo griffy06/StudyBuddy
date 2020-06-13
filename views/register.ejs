@@ -18,7 +18,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
-    <a class="navbar-brand" href="/">StudBuddy</a>
+    <a class="navbar-brand" href="/"><img src="/images/logo2.png" height="55" width="80" border-radius="50%"></img></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -39,7 +39,7 @@
 </nav>
 <%- messages('message', locals) %>
 <div class="register">
-    <h1>Register</h1><br>
+    <h1 style="border-style: solid; border-color: white">Register</h1><br>
     <form method="post" action="/register" enctype="multipart/form-data">
         <input type="text" name="name" placeholder="Name" required="required" />
         <input type="email" name="email" placeholder="Email" required="required" />

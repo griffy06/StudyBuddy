@@ -23,7 +23,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
-    <a class="navbar-brand" href="/">StudBuddy</a>
+    <a class="navbar-brand" href="/"><img src="/images/logo2.png" height="55" width="80" border-radius="50%"></img></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -48,8 +48,12 @@
     </div>
 </nav>
 <%- messages('message', locals) %>
-<br>
-<h1 align="center" style="color: white"><%= title%></h1>
+<div class="container bg-dark" style="opacity: 90%;border-style: solid; border-color: white">
+    <br>
+    <h1 align="center" style="color: white"><%= title%></h1>
+    <br>
+</div>
+
 <br>
 <div class="container" style="color: white">
     <form method="post" action="/main/profile/myposts/<%= post._id%>/edit">

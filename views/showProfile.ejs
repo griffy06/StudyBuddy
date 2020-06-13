@@ -33,7 +33,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
-    <a class="navbar-brand" href="/">StudyBuddy</a>
+    <a class="navbar-brand" href="/"><img src="/images/logo2.png" height="55" width="80" border-radius="50%"></img></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -72,7 +72,7 @@
 <div class="center">
     <% var temp = files.find(function (value) { return value._id.toString()===user.pic })%>
     <figure>
-    <img style="height: 200px; width: 200px; border-radius: 50%" src="/main/image/<%=temp.filename%>" alt="profile pic">
+    <img style="height: 250px; width: 250px; border-radius: 50%;border-style: solid; border-color: white" src="/main/image/<%=temp.filename%>" alt="profile pic">
     </figure>
 </div>
 <br>

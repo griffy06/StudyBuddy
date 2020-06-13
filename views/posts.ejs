@@ -90,6 +90,21 @@
             margin: auto;
             text-align: center;
         }
+        .Author {
+            display: flex;
+        }
+
+        .wrapper {
+            display: flex;
+            align: left;
+        }
+
+        .Name{
+            margin-left: 15px;
+        }
+        .ID {
+            margin-left: 0px;
+        }
     </style>
     <script>
         function myFunction(x) {
@@ -100,7 +115,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
-    <a class="navbar-brand" href="/">StudyBuddy</a>
+    <a class="navbar-brand" href="/"><img src="/images/logo2.png" height="55" width="80" border-radius="50%"></img></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -150,8 +165,12 @@
     </div>
 </nav>
 <%- messages('message', locals) %>
-<br>
-<h1 align="center" style="color: white"> Course: <%= current_course.course_name%></h1>
+<div class="container bg-dark" style="opacity: 90%;border-style: solid; border-color: white">
+    <br>
+    <h1 align="center" style="color: white"><%= current_course.course_name%> Posts</h1>
+    <br>
+</div>
+
 <% if(post==''){%>
     <div class="zen center" style="color: white">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640.86 653.51">
@@ -195,18 +214,25 @@
         <% if(post!=undefined){post.forEach(function(item){ %>
         <div class="post" align="center" style="color: white">
             <li class="list-group-item bg-dark post">
-                <p align="left">
-                <% var userobj = users.find(obj=>{ return obj.username===item.authorid})%>
-                <%if(userobj.pic!==undefined && userobj.pic!==null){%>
+                <div class="Author" align="left">
+                    <% var userobj = users.find(obj=>{ return obj.username===item.authorid})%>
+                    <%if(userobj.pic!==undefined && userobj.pic!==null){%>
                     <%console.log(userobj.pic)%>
-                <% var fileobj = files.find(obj=>{ return obj._id.toString()===userobj.pic})%>
-                        <img style="height: 30px;width: 30px; border-radius: 50%" src="\main\image\<%=fileobj.filename%>" alt="image">
+                    <% var fileobj = files.find(obj=>{ return obj._id.toString()===userobj.pic})%>
+                    <img style="height: 45px;width: 45px; border-radius: 50%;" src="\main\image\<%=fileobj.filename%>" alt="image">
                     <%}else{%>
-                        <img style="height: 30px; width: 30px;border-radius: 50%" src="\images\profile.png" alt="image">
+                        <img style="height: 45px; width: 45px;border-radius: 50%" src="\images\profile.png" alt="image">
                     <%}%>
-                <a href="/main/course/<%= item.course_id%>/view/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a></p>
+                    <div class="wrapper">
+                        <span class="Name">
+                            <%= item.author%><br>
+                            <span class="ID">
+                                <a href="/main/course/<%= item.course_id%>/view/<%= item.authorid%>/viewAuthor" style="font-size: small">@<%= item.authorid%></a>
+                            </span>
+                        </span>
+                    </div>
+                </div>
                 <span><h2 align="center">'<%=item.topic%>'</h2></span>
-                <p>Written by: <%= item.author%></p>
                 <p style="color: white" align="left">
                     <%= item.content%><br>
                     <br><br>

@@ -163,8 +163,8 @@
                     <%if(file!==null){%>
                         <%files.forEach(function (file2) {%>
                             <%if(file._id!==undefined && file._id.toString()===file2._id.toString()){%>
-                                <%if(file2.contentType=='image/png'){%>
-                                    <li><img width="200px" height="200px" src="\main\image\<%=file2.filename%>" alt="image"></li><br>
+                                <%if(file2.contentType=='image/png' || file2.contentType=='image/jpeg' || file2.contentType=='image/jpg'){%>
+                                    <li><a href="\main\image\<%=file2.filename%>"> <img width="200px" height="200px" src="\main\image\<%=file2.filename%>" alt="image"></a></li><br>
                                 <%}else{%>
                                     <li><%=file2.filename%></li>
                                 <%}%>

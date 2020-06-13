@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/stylesheets/nothing.css' />
-    <title>Posts</title>
+    <title><%= current_course.course_name%> Posts</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -138,7 +138,7 @@
                 <button class="btn btn-group-sm btn-circle waves-effect" type="submit"><i class="fa fa-search"></i></button>
             </form>
             <li class="nav-item">
-                <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/main/course/<%= current_course.course_id%>/view/profile">My Profile<span class="sr-only">(current)</span></a>
             </li>
 <!--            <li class="nav-item">-->
 <!--                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>-->
@@ -150,7 +150,8 @@
     </div>
 </nav>
 <%- messages('message', locals) %>
-<h1 align="center" style="color: white"> Course: <%= current_course%></h1>
+<br>
+<h1 align="center" style="color: white"> Course: <%= current_course.course_name%></h1>
 <% if(post==''){%>
     <div class="zen center" style="color: white">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640.86 653.51">
@@ -186,10 +187,11 @@
                 <circle cx="155.52" cy="365.7" r="2.43" class="cls-5" transform="rotate(-33.95 -.802 473.138)"/>
             </g>
         </svg>
-        <h2 class="msg">Nothing To show <br>Be the first one to add a Post!</h2>
+        <h4 class="msg">Nothing to Show <br>Be the first one to add a Post!</h4>
     </div>
 <%}%>
 <div class="container">
+    <br>
         <% if(post!=undefined){post.forEach(function(item){ %>
         <div class="post" align="center" style="color: white">
             <li class="list-group-item bg-dark post">
@@ -202,7 +204,7 @@
                     <%}else{%>
                         <img style="height: 30px; width: 30px;border-radius: 50%" src="\images\profile.png" alt="image">
                     <%}%>
-                <a href="/main/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a></p>
+                <a href="/main/course/<%= item.course_id%>/view/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a></p>
                 <span><h2 align="center">'<%=item.topic%>'</h2></span>
                 <p>Written by: <%= item.author%></p>
                 <p style="color: white" align="left">

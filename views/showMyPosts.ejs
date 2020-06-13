@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/stylesheets/nothing.css' />
-    <title><%= title%></title>
+    <title><%=user.name%>: <%= title%></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -52,7 +52,7 @@
         <ul class="navbar-nav rounded-right">
             <% if(viewer=='me'){%>
             <li class="nav-item">
-                <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/main/profile">Back<span class="sr-only">(current)</span></a>
             </li>
                 <%}%>
                 <% if(viewer=='other'){%>
@@ -68,6 +68,7 @@
     </div>
 </nav>
 <%- messages('message', locals) %>
+<br>
 <h1 align="center" style="color: white"><%= title%></h1>
     <% if(post==''){%>
     <div class="zen center" style="color: white">
@@ -104,7 +105,7 @@
                 <circle cx="155.52" cy="365.7" r="2.43" class="cls-5" transform="rotate(-33.95 -.802 473.138)"/>
             </g>
         </svg>
-        <h2 class="msg">Nothing To show <br>Add some Posts!</h2>
+        <h4 class="msg">Nothing to Show <br>Add some Posts!</h4>
     </div>
 <%}%>
 
@@ -115,7 +116,9 @@
             <li class="list-group-item bg-dark post">
                 <p style="color: white" align="left">
                     <%= item.content%><br>
-                    Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a><br>
+                    <% if(title=='Favourite Posts'){%>
+                    Written by: <%= item.author%> <a href="/main/profile/bookmarks/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a><br>
+                        <%}%>
                     <i class="fa fa-thumbs-up"></i>&nbsp<%= item.no_of_likes%> &nbsp&nbsp&nbsp
                     <i class="fa fa-thumbs-down"></i>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
                     <a href="/main/<%= item._id%>/comments">
@@ -123,7 +126,7 @@
                 </p>
                 <% if(viewer=='me'){%>
                 <% if(title=='My Posts'){%>
-                <a href="/main/profile/myposts/<%= item._id%>/edit"><button type="button" class="btn btn-success btn-group-sm">Edit</button></a>
+                <a href="/main/profile/myposts/<%= item._id%>/edit"><button type="button" class="btn btn-success btn-group-sm">Edit</button></a>&nbsp &nbsp
                 <a href="/main/profile/myposts/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-group-sm">Delete</button></a>
                 <%}%>
                 <% if(title=='Favourite Posts'){%>

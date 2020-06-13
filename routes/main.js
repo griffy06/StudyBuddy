@@ -66,8 +66,13 @@ router.get('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                                     else
                                     {
                                         //console.log(files);
-                                        res.render('posts', {files: files,post: post, course:course, current_course:req.params.id, user:req.user});
-                                        return;
+                                        User.find(function (err, users) {
+                                            if(err) console.log(err);
+                                            else
+                                                res.render('posts', {files: files,post: post, course:course, current_course:req.params.id, user:req.user, users:users});
+
+                                        })
+                                        //return;
                                     }
                                 })
 
@@ -746,7 +751,7 @@ router.get('/document/:filename', function (req,res) {
         }
 
         //check if image
-        if(file.contentType==='application/pdf' || file.contentType==='application/octet-stream' || file.contentType==='text/plain')
+        if(file.contentType==='application/pdf' || file.contentType==='application/octet-stream' || file.contentType==='text/plain' || file.contentType==='application/x-zip-compressed')
         {
             //read output to browser
             const readStream = gfs.createReadStream(file.filename);

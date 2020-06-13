@@ -151,14 +151,22 @@
         <% if(post!=undefined){post.forEach(function(item){ %>
         <div class="post" align="center" style="color: white">
             <li class="list-group-item bg-dark post">
-                <p align="left"><a href="/main/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a></p>
+                <p align="left">
+                <% var userobj = users.find(obj=>{ return obj.username===item.authorid})%>
+                <%if(userobj.pic!==undefined && userobj.pic!==null){%>
+                    <%console.log(userobj.pic)%>
+                <% var fileobj = files.find(obj=>{ return obj._id.toString()===userobj.pic})%>
+                        <img style="height: 30px;width: 30px; border-radius: 50%" src="\main\image\<%=fileobj.filename%>" alt="image">
+                    <%}else{%>
+                        <img style="height: 30px; width: 30px;border-radius: 50%" src="\images\profile.png" alt="image">
+                    <%}%>
+                <a href="/main/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a></p>
                 <span><h2 align="center">'<%=item.topic%>'</h2></span>
                 <p>Written by: <%= item.author%></p>
                 <p style="color: white" align="left">
                     <%= item.content%><br>
                     <br><br>
                 </p>
-
 
                     <% item.fileField.forEach(function (file) {%>
                     <%if(file!==null){%>
@@ -168,7 +176,7 @@
                                     <a href="\main\image\<%=file2.filename%>"> <img height="350px" src="\main\image\<%=file2.filename%>" alt="image"></a><br>
                                 <%}else if(file2.contentType=='video/mp4' || file2.contentType=='video/ogg' || file2.contentType=='video/webm'){%>
                                     <video height="400px" controls><source src="\main\video\<%=file2.filename%>" type="<%=file2.contentType%>"></video><br>
-                                <%}else if(file2.contentType==='application/pdf' || file2.contentType==='application/octet-stream' || file2.contentType==='text/plain'){%>
+                                <%}else if(file2.contentType==='application/pdf' || file2.contentType==='application/octet-stream' || file2.contentType==='text/plain' || file2.contentType==='application/x-zip-compressed'){%>
                                     <a href="\main\document\<%=file2.filename%>"><%=file2.filename%></a><br>
                                 <%}else{%>
                                     <%=file2.filename%>
@@ -180,7 +188,6 @@
                     <%})%>
                     <%}%>
                     <%})%>
-
                 <a href="/main/<%= item._id%>/like"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
                         <% if(user.posts_liked.indexOf(item._id)!==-1){%>
                             <i class="fa fa-thumbs-up"></i>

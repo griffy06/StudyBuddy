@@ -116,7 +116,9 @@
             <li class="list-group-item bg-dark post">
                 <p style="color: white" align="left">
                     <%= item.content%><br>
-                    Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a><br>
+                    <% if(title=='Favourite Posts'){%>
+                    Written by: <%= item.author%> <a href="/main/profile/bookmarks/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a><br>
+                        <%}%>
                     <i class="fa fa-thumbs-up"></i>&nbsp<%= item.no_of_likes%> &nbsp&nbsp&nbsp
                     <i class="fa fa-thumbs-down"></i>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
                     <a href="/main/<%= item._id%>/comments">

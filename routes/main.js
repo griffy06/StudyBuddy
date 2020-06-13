@@ -593,7 +593,7 @@ router.get('/:id/viewAuthor', ensureAuthenticated, function (req,res) {
             global.gfs.files.find().toArray(function (err, files) {
                 if(err) console.log(err);
                 else
-                    res.render('showProfile',{user:user[0], viewer:'other', files:files});
+                    res.render('showProfile',{url:'main/'+req.params.id+'/viewAuthor',user:user[0], viewer:'other', files:files});
             })
            // res.render('showProfile',{user:user[0], viewer:'other'});
         }
@@ -607,7 +607,7 @@ router.get('/course/:id1/view/:id2/viewAuthor', ensureAuthenticated, function (r
             console.log(err);
         }
         else {
-            global.gfs.files.find.toArray(function (err, files) {
+            global.gfs.files.find().toArray(function (err, files) {
                 if(err) console.log(err);
                 else
                     res.render('showProfile',{url:'main/course/'+req.params.id1+'/view',user:user[0], viewer:'other', files:files});
@@ -616,6 +616,41 @@ router.get('/course/:id1/view/:id2/viewAuthor', ensureAuthenticated, function (r
         }
     })
 });
+router.get('/profile/bookmarks/:id/viewAuthor', ensureAuthenticated, function (req,res) {
+    User.find({username:req.params.id},function (err,user) {
+        if(err)
+        {
+            console.log(err);
+        }
+        else {
+            global.gfs.files.find().toArray(function (err, files) {
+                if(err) console.log(err);
+                else
+                    res.render('showProfile',{url:'main/profile/bookmarks',user:user[0], viewer:'other', files:files});
+            })
+            // res.render('showProfile',{user:user[0], viewer:'other'});
+        }
+    })
+});
+
+router.get('/:id1/comments/:id2/viewAuthor', ensureAuthenticated, function (req,res) {
+    User.find({username:req.params.id2},function (err,user) {
+        console.log(user[0]);
+        if(err)
+        {
+            console.log(err);
+        }
+        else {
+            global.gfs.files.find().toArray(function (err, files) {
+                if(err) console.log(err);
+                else
+                    res.render('showProfile',{url:'main/'+req.params.id1+'/comments',user:user[0], viewer:'other', files:files});
+            })
+            // res.render('showProfile',{user:user[0], viewer:'other'});
+        }
+    })
+});
+
 
 router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
     User.find({username:req.params.id},function (err,user) {

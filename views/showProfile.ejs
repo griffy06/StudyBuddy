@@ -51,6 +51,11 @@
                 <a class="nav-link" href="/main/profile/bookmarks">Favourite Posts<span class="sr-only">(current)</span></a>
             </li>
             <%}%>
+            <li class="nav-item">
+            <% if(viewer=='other'){%>
+                <a class="nav-link" href="/main/<%= user.username%>/AllPosts">Posts By <%= user.name%></a>
+            <%}%>
+            </li>
         </ul>
         <ul class="navbar-nav rounded-right">
             <li class="nav-item">
@@ -111,13 +116,6 @@
             <%}%>
     </form>
     <br>
-    <br>
-    <div class="container" align="center">
-        <% if(viewer=='other'){%>
-            <a href="/main/<%= user.username%>/AllPosts"><button type="button" class="btn btn-primary btn-group-sm">Posts By <%= user.name%></button></a>
-        <%}%>
-    </div>
-
 </div>
 
 <script src='/bower_components/jquery/dist/jquery.js'></script>

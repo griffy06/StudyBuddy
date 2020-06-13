@@ -165,6 +165,8 @@
                             <%if(file._id!==undefined && file._id.toString()===file2._id.toString()){%>
                                 <%if(file2.contentType=='image/png' || file2.contentType=='image/jpeg' || file2.contentType=='image/jpg'){%>
                                     <li><a href="\main\image\<%=file2.filename%>"> <img width="200px" height="200px" src="\main\image\<%=file2.filename%>" alt="image"></a></li><br>
+                                <%}else if(file2.contentType=='video/mp4' || file2.contentType=='video/ogg' || file2.contentType=='video/webm'){%>
+                                    <li><a href="\main\video\<%=file2.filename%>"> <video width="200px" height="200px" controls><source src="\main\video\<%=file2.filename%>" type="<%=file2.contentType%>"></video></a></li><br>
                                 <%}else{%>
                                     <li><%=file2.filename%></li>
                                 <%}%>

@@ -4,6 +4,7 @@ let Course=require('../models/course');
 let Post=require('../models/post');
 let User=require('../models/user');
 const bcrypt = require('bcryptjs');
+let Comment=require('../models/comment');
 const passport = require('passport');
 const crypto = require('crypto');
 const multer = require('multer');
@@ -105,7 +106,8 @@ router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50),
         p.no_of_dislikes=0;
         p.no_of_likes=0;
         p.author=req.user.name;
-        p.authorid = req.user.username;
+        p.authorid=req.user.username;
+        p.no_of_comments=0;
         p.content=req.body.content;
         p.tag = req.body.tags.split(',');
         Course.find({course_id:req.params.id},{},function(err1,course1){
@@ -250,6 +252,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                     item.author = req.body.name;
                     item.no_of_likes=item.no_of_likes;
                     item.no_of_dislikes=item.no_of_dislikes;
+                    item.no_of_comments=item.no_of_comments;
                     item.content=item.content;
                     item.tag=item.tag;
                     item.save(function (err) {
@@ -289,6 +292,7 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                         item.author = item.author;
                         item.no_of_likes=item.no_of_likes;
                         item.no_of_dislikes=item.no_of_dislikes;
+                        item.no_of_comments=item.no_of_comments;
                         item.content=item.content;
                         item.tag=item.tag;
                         item.save(function (err) {
@@ -567,7 +571,108 @@ router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
         }
     })
 });
+router.get('/:id/comments', ensureAuthenticated, function (req,res) {
+    Comment.find({post_id: req.params.id},{},function(err,comments){
+        //console.log(comments);
+        Post.find({_id:req.params.id},{},function(err,post){
+            res.render('comments',{courseid:post[0].course_id,postid:req.params.id,user:req.user,comments:comments});
+        })
+    })
+});
 
+router.post('/:id/post', ensureAuthenticated, function (req,res) {
+    let c=new Comment();
+    c.post_id=req.params.id;
+    c.no_of_likes=0;
+    c.no_of_dislikes=0;
+    c.authorid=req.user.username;
+    c.author=req.user.name;
+    c.content=req.body.content;
+    Post.find({_id:req.params.id},{},function(err,post) {
+        if (err) {
+            console.log(err)
+        } else {
+            post[0].no_of_comments += 1;
+            post[0].save(function (err1) {
+                if (err1) {
+                    console.log(err1);
+                } else {
+                    c.save(function (err2) {
+                        if (err2) {
+                            console.log(err2);
+                        } else {
+                            res.redirect('/main/' + req.params.id + '/comments');
+                        }
+                    })
+                }
+            })
+        }
+    })
+
+});
+
+router.get('/:id/commentLike', ensureAuthenticated, function (req,res,next) {
+    let user=req.user;
+    Comment.findById(req.params.id,function(err,post) {
+        if (user.comments_liked.indexOf(req.params.id) === -1)
+        {
+            post.no_of_likes = post.no_of_likes + 1;
+            user.comments_liked.push(req.params.id);
+        }
+
+        if (user.comments_disliked.indexOf(req.params.id) !== -1)
+        {
+            post.no_of_dislikes = post.no_of_dislikes - 1;
+            user.comments_disliked.splice(user.comments_disliked.indexOf(req.params.id),1);
+        }
+
+        User.update({_id:req.user._id},user,function(e){
+            if (e) {
+                console.log(e);
+            } else {
+                Comment.update({_id: req.params.id}, post, function (err1) {
+                    if (err1) {
+                        console.log(err1);
+                    } else {
+                        res.redirect('/main/' + post.post_id + '/comments');
+                    }
+                })
+            }
+        })
+    })
+});
+
+router.get('/:id/commentDislike', ensureAuthenticated, function (req,res,next) {
+    let user=req.user;
+    Comment.findById(req.params.id,function(err,post) {
+        if (user.comments_disliked.indexOf(req.params.id) === -1)
+        {
+            post.no_of_dislikes = post.no_of_dislikes + 1;
+            user.comments_disliked.push(req.params.id);
+        }
+
+        if (user.comments_liked.indexOf(req.params.id) !== -1)
+        {
+            post.no_of_likes = post.no_of_likes - 1;
+            user.comments_liked.splice(user.comments_liked.indexOf(req.params.id),1);
+        }
+
+        User.update({_id:req.user._id},user,function(e){
+            if (err) {
+                console.log(err);
+            } else {
+                Comment.update({_id: req.params.id}, post, function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.redirect('/main/' + post.post_id + '/comments');
+                    }
+                })
+            }
+        })
+
+    })
+})
 function ensureAuthenticated(req,res,next)
 {
     if(req.isAuthenticated()) {

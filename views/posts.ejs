@@ -14,7 +14,6 @@
             $("#messages").fadeOut().empty();
         }, 1000);
     </script>
-
     <style>
         body {
             background-color: #a4a5a7;
@@ -44,6 +43,47 @@
             -o-transition: all .25s ease;
             transition: all .25s ease;
             text-align: center;
+        }
+        .fixed_button1{
+            position: fixed;
+            bottom: 15px;
+            right: 80px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px ;
+            z-index: 99;
+            -webkit-transform: translate3d(0,0,0);
+            -webkit-transition: all .25s ease;
+            -moz-transition: all .25s ease;
+            -ms-transition: all .25s ease;
+            -o-transition: all .25s ease;
+            transition: all .25s ease;
+            text-align: center;
+        }
+        .fixed_button2{
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px ;
+            z-index: 99;
+            -webkit-transform: translate3d(0,0,0);
+            -webkit-transition: all .25s ease;
+            -moz-transition: all .25s ease;
+            -ms-transition: all .25s ease;
+            -o-transition: all .25s ease;
+            transition: all .25s ease;
+            text-align: center;
+        }
+        #hide{
+            display: none;
+            position:fixed;
+            bottom: 8px;
+            right: 20px;
+            width: 500px;
+            height: 200px;
+            opacity: 70%;
         }
     </style>
     <script>
@@ -148,6 +188,8 @@
                                 <i class="fa fa-thumbs-down"></i>
                             <%}%>
                     </button></a>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/comments"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <i class="fa fa-comment"></i></button></a>&nbsp<%= item.no_of_comments%>&nbsp &nbsp &nbsp
                 <a href="/main/<%= item._id%>/bookmark"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
                         <% if(user.posts_bookmarked.indexOf(item._id)===-1){%>
                             <i class="fa fa-star-o"></i>
@@ -160,7 +202,33 @@
         <br>
         <%});}%>
      <br>
-    <a href="/main/course/<%= current_course%>/create"><button type="button" class="btn btn-primary btn-group-sm waves-effect fixed_button"><i class="fa fa-pencil" style="font-size:25px"></i></button></a>
+    <button type="button" onclick="myFunction()" class="btn btn-primary btn-group-sm waves-effect fixed_button2"><i class="fa fa-pencil" style="font-size:25px"></i></button></a>
+
+    <div class="container" id="hide">
+        <form method="post" action="/main/course/<%= current_course%>/create" enctype="multipart/form-data">
+            <div class="form-group">
+                <textarea type="text" class="form-control" id="content" name="content" placeholder="Write a Post!" ></textarea>
+            </div>
+            <div class="form-group">
+                <textarea type="text" class="form-control" id="tags" name="tags" placeholder="Enter tags separated by comma." ></textarea>
+            </div>
+            <div style="color: white">
+                <input type="file" name="files" multiple />
+            </div>
+            <button type="submit" class="btn btn-primary fixed_button1"><i class="fa fa-paper-plane"></i></button>
+        </form>
+    </div>
+    <script>
+    function myFunction() {
+    var x = document.getElementById("hide");
+    if (x.style.display === "none") {
+    x.style.display = "block";
+    } else {
+    x.style.display = "none";
+    }
+
+    }
+    </script>
 </div>
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>

@@ -29,6 +29,14 @@ const UserSchema = mongoose.Schema({
     posts_bookmarked:{
         type:Array,
         required:false
+    },
+    comments_liked:{
+        type:Array,
+        required:false
+    },
+    comments_disliked:{
+        type:Array,
+        required:false
     }
 });
 

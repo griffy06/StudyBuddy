@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
+    <title>main</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        setTimeout(function() {
+            $("#messages").fadeOut().empty();
+        }, 1000);
+    </script>
+    <style>
+        body {
+            background-color: #a4a5a7;
+            background: linear-gradient(180deg, #76777a 0%, #39393c 37%, #000108 100%) fixed;
+        }
+        .post{
+            opacity:90%;
+            height: 100%;
+        }
+        .btn-circle{
+            width: 40px;
+            height: 40px;
+            border-radius: 20px ;
+        }
+        .fixed_button1{
+            position: fixed;
+            bottom: 15px;
+            right: 80px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px ;
+            z-index: 99;
+            -webkit-transform: translate3d(0,0,0);
+            -webkit-transition: all .25s ease;
+            -moz-transition: all .25s ease;
+            -ms-transition: all .25s ease;
+            -o-transition: all .25s ease;
+            transition: all .25s ease;
+            text-align: center;
+        }
+        .fixed_button2{
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px ;
+            z-index: 99;
+            -webkit-transform: translate3d(0,0,0);
+            -webkit-transition: all .25s ease;
+            -moz-transition: all .25s ease;
+            -ms-transition: all .25s ease;
+            -o-transition: all .25s ease;
+            transition: all .25s ease;
+            text-align: center;
+        }
+        .fixed_box{
+            width: 1000px;
+            height: 55px;
+            position: fixed;
+            bottom: 10px;
+            right: 145px;
+        }
+        #box{
+            display: none;
+            opacity: 70%;
+        }
+    </style>
+    <script>
+        function myFunction(x) {
+            x.classList.toggle("fa-thumbs-down");
+        }
+    </script>
+
+</head>
+<nav class="navbar navbar-expand-md navbar-dark bg-transparent">
+    <a class="navbar-brand" href="/">StudyBuddy</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/main">Home<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <ul class="navbar-nav rounded-right">
+            <li class="nav-item">
+                <a class="nav-link" href="/main/course/<%= courseid%>/view">Back to Post<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<%- messages('message', locals) %>
+<br>
+<div class="container">
+    <h1 align="center" style="color: white">Comments</h1><br>
+    <% if(comments!=undefined){comments.forEach(function(item){ %>
+        <div class="post" align="center" style="color: white">
+            <li class="list-group-item bg-dark post">
+                <p style="color: white" align="left">
+                    <%= item.content%><br>
+                    Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">
+                        @<%= item.authorid%>
+                    </a><br><br><br>
+                </p>
+                <a href="/main/<%= item._id%>/commentLike"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.comments_liked.indexOf(item._id)!==-1){%>
+                            <i class="fa fa-thumbs-up"></i>
+                        <%}else{%>
+                            <i class="fa fa-thumbs-o-up"></i>
+                        <%}%>
+                    </button></a>&nbsp<%= item.no_of_likes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/commentDislike"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.comments_disliked.indexOf(item._id)===-1){%>
+                            <i class="fa fa-thumbs-o-down"></i>
+                        <%}else{%>
+                            <i class="fa fa-thumbs-down"></i>
+                        <%}%>
+                    </button></a>&nbsp<%= item.no_of_dislikes%>
+            </li>
+        </div>
+        <br>
+    <%});}%>
+    <br>
+</div>
+<button onclick="myFunction()" class="btn btn-primary fixed_button2"><i class="fa fa-plus"></i></button>
+<div id="box">
+    <form method="post" action="/main/<%= postid%>/post%>">
+        <div class="form-group">
+            <textarea type="text" class="form-control fixed_box" id="content" name="content" placeholder="Comment here!" ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary fixed_button1"><i class="fa fa-paper-plane"></i></button>
+    </form>
+</div>
+<script>
+    function myFunction() {
+    var x = document.getElementById("box");
+    if (x.style.display === "none") {
+    x.style.display = "block";
+    } else {
+    x.style.display = "none";
+    }
+
+    }
+</script>
+<script src='/bower_components/jquery/dist/jquery.js'></script>
+<script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>
+</body>
+</html>

@@ -108,6 +108,7 @@ router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50),
         p.author=req.user.name;
         p.authorid=req.user.username;
         p.no_of_comments=0;
+        p.topic = req.body.topic;
         p.content=req.body.content;
         p.tag = req.body.tags.split(',');
         Course.find({course_id:req.params.id},{},function(err1,course1){

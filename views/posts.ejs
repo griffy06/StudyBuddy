@@ -82,7 +82,7 @@
             bottom: 8px;
             right: 20px;
             width: 500px;
-            height: 200px;
+            height: 430px;
             opacity: 70%;
         }
     </style>
@@ -151,33 +151,36 @@
         <% if(post!=undefined){post.forEach(function(item){ %>
         <div class="post" align="center" style="color: white">
             <li class="list-group-item bg-dark post">
+                <p align="left"><a href="/main/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a></p>
+                <span><h2 align="center">'<%=item.topic%>'</h2></span>
+                <p>Written by: <%= item.author%></p>
                 <p style="color: white" align="left">
                     <%= item.content%><br>
-                    Written by: <%= item.author%> <a href="/main/<%= item.authorid%>/viewAuthor">
-                        @<%= item.authorid%>
-                    </a><br><br><br>
+                    <br><br>
                 </p>
-                <p>Attached files:</p>
-                <ul>
+
+
                     <% item.fileField.forEach(function (file) {%>
                     <%if(file!==null){%>
                         <%files.forEach(function (file2) {%>
                             <%if(file._id!==undefined && file._id.toString()===file2._id.toString()){%>
                                 <%if(file2.contentType=='image/png' || file2.contentType=='image/jpeg' || file2.contentType=='image/jpg'){%>
-                                    <li><a href="\main\image\<%=file2.filename%>"> <img width="200px" height="200px" src="\main\image\<%=file2.filename%>" alt="image"></a></li><br>
+                                    <a href="\main\image\<%=file2.filename%>"> <img height="350px" src="\main\image\<%=file2.filename%>" alt="image"></a><br>
                                 <%}else if(file2.contentType=='video/mp4' || file2.contentType=='video/ogg' || file2.contentType=='video/webm'){%>
-                                    <li><video width="200px" height="200px" controls><source src="\main\video\<%=file2.filename%>" type="<%=file2.contentType%>"></video></li><br>
+                                    <video height="400px" controls><source src="\main\video\<%=file2.filename%>" type="<%=file2.contentType%>"></video><br>
                                 <%}else if(file2.contentType==='application/pdf' || file2.contentType==='application/octet-stream' || file2.contentType==='text/plain'){%>
-                                    <li><a href="\main\document\<%=file2.filename%>"><%=file2.filename%></a></li><br>
+                                    <a href="\main\document\<%=file2.filename%>"><%=file2.filename%></a><br>
                                 <%}else{%>
-                                    <li><%=file2.filename%></li>
+                                    <%=file2.filename%>
                                 <%}%>
+            <br><br>
                             <%}%>
+
 
                     <%})%>
                     <%}%>
                     <%})%>
-                </ul>
+
                 <a href="/main/<%= item._id%>/like"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
                         <% if(user.posts_liked.indexOf(item._id)!==-1){%>
                             <i class="fa fa-thumbs-up"></i>
@@ -211,7 +214,10 @@
     <div class="container" id="hide">
         <form method="post" action="/main/course/<%= current_course%>/create" enctype="multipart/form-data">
             <div class="form-group">
-                <textarea type="text" class="form-control" id="content" name="content" placeholder="Write a Post!" ></textarea>
+                <textarea type="text" class="form-control" id="topic" name="topic" placeholder="Enter title" ></textarea>
+            </div>
+            <div class="form-group">
+                <textarea style="height: 200px" type="text" class="form-control" id="content" name="content" placeholder="Write a Post!" ></textarea>
             </div>
             <div class="form-group">
                 <textarea type="text" class="form-control" id="tags" name="tags" placeholder="Enter tags separated by comma." ></textarea>

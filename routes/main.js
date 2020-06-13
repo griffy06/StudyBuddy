@@ -736,4 +736,30 @@ router.get('/video/:filename', function (req,res) {
 
 })
 
+router.get('/document/:filename', function (req,res) {
+    gfs.files.findOne({filename: req.params.filename}, function (err,file) {
+        if(!file || file.length===0){
+            return res.status(404).json({
+                err:'No file exists'
+            })
+        }
+
+        //check if image
+        if(file.contentType==='application/pdf' || file.contentType==='application/octet-stream' || file.contentType==='text/plain')
+        {
+            //read output to browser
+            const readStream = gfs.createReadStream(file.filename);
+            readStream.pipe(res);
+        }
+        else
+        {
+            return res.status(404).json({
+                err:'Not a video'
+            })
+        }
+    })
+
+
+})
+
 module.exports = router;

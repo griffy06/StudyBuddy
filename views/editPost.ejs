@@ -58,19 +58,46 @@
 <div class="container" style="color: white">
     <form method="post" action="/main/profile/myposts/<%= post._id%>/edit">
         <div class="form-group">
-            <label for="tags"><h6>Tags</h6></label>
-            <textarea type="text" class="form-control" id="tags" name="tags" ><%= post.tag%></textarea>
+            <label for="topic"><h6>Title</h6></label>
+            <textarea type="text" class="form-control" id="topic" name="topic" ><%= post.topic%></textarea>
         </div>
-        <br>
+
         <div class="form-group">
             <label for="content"><h6>Content</h6></label>
             <textarea type="text" class="form-control" id="content" name="content"><%= post.content%></textarea>
+        </div>
+        <div class="form-group">
+            <label for="tags"><h6>Tags</h6></label>
+            <textarea type="text" class="form-control" id="tags" name="tags" ><%= post.tag%></textarea>
         </div><br>
         <div align="center">
             <button type="submit" class="btn btn-success">Save Changes</button>
         </div>
 
-    </form>
+    </form><br><br>
+        <div align="center">
+            <h5>Make changes to the attached files:</h5><br>
+        <!--    <textarea type="" class="form-control" id="tags" name="tags" ><%= post.tag%></textarea>-->
+        </div>
+    <div align="center">
+        <%post.fileField.forEach(function (filepost) {%>
+            <%files.forEach(function (file) {%>
+                <%if(file._id.toString()===filepost._id.toString()){%>
+               <br> <form method="post" action="/main/profile/myposts/<%= post._id%>/edit/<%=file._id%>/delete">
+                    <%=file.filename%>
+                    <button type="submit" class="btn btn-danger" style="margin-left: 10%;">Remove file</button>
+                </form>
+                <%}%>
+            <%})%>
+
+        <%})%>
+        <br><br></div>
+    <form method="get" action="/main/profile/myposts">
+        <div align="center">
+        <button type="submit" class="btn btn-info">Go back to my posts!</button>
+        </div><br><br>
+     </form>
+
 </div>
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>

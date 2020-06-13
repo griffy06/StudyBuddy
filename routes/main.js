@@ -413,17 +413,23 @@ router.get('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,n
     Post.findById(req.params.id,{},function(err,post){
         console.log(post);
         if(err){
+            console.log(err);
             return;
         }
         else{
-            res.render('editPost',{post:post,title:'Edit Post'});
-            return;
+            global.gfs.files.find().toArray(function (err, files) {
+                if(err) console.log(err);
+                else res.render('editPost',{post:post,title:'Edit Post', files:files});
+            })
+
+          //  return;
         }
     })
 });
 router.post('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,next) {
     //console.log(req.user.username);
     Post.findById(req.params.id,{},function(err,post){
+        post.topic = req.body.topic;
         post.content=req.body.content;
         post.tag=req.body.tags;
         if(err){
@@ -434,7 +440,8 @@ router.post('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,
                 if(e){
                     console.log(e);
                 }
-                res.redirect('/main/profile/myposts');
+                req.flash('success','Changes saved!');
+                res.redirect('/main/profile/myposts/'+req.params.id+'/edit');
                 return;
             })
         }
@@ -442,6 +449,24 @@ router.post('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,
 });
 router.get('/profile/myposts/:id/delete', ensureAuthenticated, function (req,res,next) {
     //console.log(req.user.username);
+   /* let temp = Post.find(function (value) {
+        return value._id.toString()===req.params.id;
+    })*/
+   // let temp2=temp.fileField;
+    Post.find({_id:req.params.id}, function (err, post) {
+        if(err) console.log(err);
+        else {
+            console.log(post);
+           /* let temp=[];
+            temp=post.fileField;*/
+            //console.log(temp);
+            post[0].fileField.forEach(function (filetemp) {
+                gfs.remove({_id: filetemp._id, root: 'uploads'}, function (err, gridStore) {
+                    if (err) console.log(err);
+                })
+            })
+        }
+    })
     Post.remove({_id:req.params.id},function(err){
         if(err){
             console.log(err);
@@ -457,7 +482,7 @@ router.get('/profile/myposts/:id/delete', ensureAuthenticated, function (req,res
                     console.log(err);
                 } else {
                     res.redirect('/main/profile/myposts');
-                    return;
+
                 }
             })
         }
@@ -774,6 +799,26 @@ router.get('/:id/commentDislike', ensureAuthenticated, function (req,res,next) {
 
     })
 })
+
+router.post('/profile/myposts/:id/edit/:fileid/delete', function (req,res) {
+    gfs.remove({_id: req.params.fileid, root: 'uploads'}, function (err, gridStore) {
+        if (err) console.log(err);
+    })
+    Post.find({_id:req.params.id},function (err, post) {
+        if(err){ console.log(err); return;}
+        post[0].fileField.splice(post[0].fileField.indexOf(req.params.fileid),1);
+        Post.update({_id:req.params.id},post[0],function (err) {
+            if(err) console.log(err);
+            else{
+                req.flash('success','File removed!')
+                res.redirect('/main/profile/myposts/'+req.params.id+'/edit');}
+                //res.redirect('/');
+        })
+    })
+})
+
+
+
 function ensureAuthenticated(req,res,next)
 {
     if(req.isAuthenticated()) {

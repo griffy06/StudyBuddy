@@ -224,8 +224,21 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                             return;
                         }
                         else{
-                            res.render('posts', {post: arrUnique, course:course, current_course:req.params.id, user:req.user});
-                            return;
+                            global.gfs.files.find().toArray(function (err, files) {
+                                if(err) console.log(err);
+                                else{
+                                    User.find(function (err, users) {
+                                        if(err) console.log(err);
+                                        else
+                                            res.render('posts', {post: arrUnique, course:course, current_course:req.params.id, user:req.user, users:users, files:files});
+                                    })
+                                }
+
+
+                            })
+
+
+                          //  return;
                         }
                     });
                 }
@@ -557,7 +570,7 @@ router.get('/:id/viewAuthor', ensureAuthenticated, function (req,res) {
             console.log(err);
         }
         else {
-            global.gfs.files.find.toArray(function (err, files) {
+            global.gfs.files.find().toArray(function (err, files) {
                 if(err) console.log(err);
                 else
                     res.render('showProfile',{user:user[0], viewer:'other', files:files});

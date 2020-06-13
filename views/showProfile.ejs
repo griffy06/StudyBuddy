@@ -63,8 +63,12 @@
 <div class="profilepic">
     <% var temp = files.find(function (value) { return value._id.toString()===user.pic })%>
     <figure>
-    <img style="height: 250px; width: 250px; margin-left: 20%;margin-top: 5%; border-radius: 50%" src="/main/image/<%=temp.filename%>" alt="profile pic">
-    <figcaption style="color: white; margin-left: 26.5%;margin-top: 1%">@<%=user.username%></figcaption>
+        <%if(temp!==undefined){%>
+        <img style="height: 250px; width: 250px; margin-left: 20%;margin-top: 5%; border-radius: 50%" src="/main/image/<%=temp.filename%>" alt="profile pic">
+        <%}else{%>
+        <img style="height: 250px; width: 250px; margin-left: 20%;margin-top: 5%; border-radius: 50%" src="/images/profile.png" alt="profile pic">
+        <%}%>
+        <figcaption style="color: white; margin-left: 26.5%;margin-top: 1%">@<%=user.username%></figcaption>
     </figure>
 </div>
 <div class="login" style="margin-left: 5%">

@@ -403,8 +403,21 @@ router.get('/profile/myposts', ensureAuthenticated, function (req,res,next) {
             return;
         }
         else{
-            res.render('showMyPosts',{user:req.user,post:post,title:'My Posts',viewer:'me'});
-            return;
+            global.gfs.files.find().toArray(function (err, files) {
+                if(err) console.log(err);
+                else{
+                    User.find(function (err, users) {
+                        if(err) console.log(err);
+                        else
+                        {
+                            res.render('showMyPosts',{user:req.user,post:post,title:'My Posts',viewer:'me', files:files, users:users});
+                        }
+                    })
+
+                }
+            })
+
+           // return;
         }
     })
 });
@@ -591,7 +604,21 @@ router.get('/profile/bookmarks', ensureAuthenticated, function (req,res) {
                     arr.push(item);
                 })
             })
-        res.render('showMyPosts',{user:req.user,viewer:'me',post:arr,title:'Favourite Posts'});
+        global.gfs.files.find().toArray(function (err, files) {
+            if(err) console.log(err);
+            else
+            {
+                User.find(function (err, users) {
+                    if(err) console.log(err);
+                    else
+                    {
+                        res.render('showMyPosts',{user:req.user,viewer:'me',post:arr,title:'Favourite Posts', users:users, files:files});
+                    }
+                })
+            }
+
+        })
+
         return;
         })
 });
@@ -690,7 +717,22 @@ router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
                     return;
                 }
                 else{
-                    res.render('showMyPosts',{user:user[0],post:post,title:'All Posts by '+user[0].name,viewer:'other'});
+                    global.gfs.files.find().toArray(function (err,files) {
+                        if(err) console.log(err);
+                        else
+                        {
+                            User.find(function (err,users) {
+                                if(err) console.log(err);
+                                else
+                                {
+                                    res.render('showMyPosts',{user:user[0],post:post,title:'All Posts by '+user[0].name,viewer:'other', files:files, users:users});
+                                }
+
+                            })
+                        }
+
+                    })
+
                     return;
                 }
             })

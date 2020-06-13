@@ -290,7 +290,7 @@
 <br>
     <button type="button" onclick="myFunction()" class="btn btn-primary btn-group-sm waves-effect fixed_button2"><i class="fa fa-pencil" style="font-size:25px"></i></button></a>
     <div class="container" id="hide">
-        <form method="post" action="/main/course/<%= current_course%>/create" enctype="multipart/form-data">
+        <form method="post" action="/main/course/<%= current_course._id%>/create" enctype="multipart/form-data">
             <div class="form-group">
                 <textarea type="text" class="form-control" id="topic" name="topic" placeholder="Enter title" ></textarea>
             </div>

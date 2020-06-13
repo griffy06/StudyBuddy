@@ -115,27 +115,109 @@
 <div class="container">
     <br>
     <% if(post!=undefined){post.forEach(function(item){ %>
-        <div class="post" align="center">
+        <div class="post" align="center" style="color: white">
             <li class="list-group-item bg-dark post">
-                <p style="color: white" align="left">
-                    <%= item.content%><br>
+                <% if(viewer=='me'){%>
+                    <% if(title=='My Posts'){%>
+                    <div align="right">
+                        <a href="/main/profile/myposts/<%= item._id%>/edit"><button type="button" class="btn btn-success btn-group-sm">Edit</button></a>&nbsp &nbsp
+                        <a href="/main/profile/myposts/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-group-sm">Delete</button></a>
+                    </div>
+                    <%}%>
                     <% if(title=='Favourite Posts'){%>
-                    Written by: <%= item.author%> <a href="/main/profile/bookmarks/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a><br>
+                        <div align="right">
+                        <a href="/main/profile/bookmarks/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-group-sm">Delete from favorites</button></a>
+                        </div>
                         <%}%>
+                <%}%>
+
+                <!--------------------------------------------------------------------->
+                <div class="Author" align="left" style="margin-top: -3%">
+                    <% var userobj = users.find(obj=>{ return obj.username===item.authorid})%>
+                    <%if(userobj.pic!==undefined && userobj.pic!==null){%>
+                    <%console.log(userobj.pic)%>
+                    <% var fileobj = files.find(obj=>{ return obj._id.toString()===userobj.pic})%>
+                    <img style="height: 45px;width: 45px; border-radius: 50%;" src="\main\image\<%=fileobj.filename%>" alt="image">
+                    <%}else{%>
+                        <img style="height: 45px; width: 45px;border-radius: 50%" src="\images\profile.png" alt="image">
+                    <%}%>
+                    <div class="wrapper">
+                        <span class="Name">
+                            <%= item.author%><br>
+                            <span class="ID">
+                                <a href="/main/course/<%= item.course_id%>/view/<%= item.authorid%>/viewAuthor" style="font-size: small">@<%= item.authorid%></a>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <!----------------------------------------------------------------------------------------->
+                 <!--   Written by: <%= item.author%> <a href="/main/profile/bookmarks/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a><br>
+
+                <div align="center">
                     <i class="fa fa-thumbs-up"></i>&nbsp<%= item.no_of_likes%> &nbsp&nbsp&nbsp
                     <i class="fa fa-thumbs-down"></i>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
                     <a href="/main/<%= item._id%>/comments">
                             <i class="fa fa-comment"></i></a>&nbsp<%= item.no_of_comments%>
+                </div>
+                </p>-->
+
+                <span><h2 align="center">'<%=item.topic%>'</h2></span>
+                <p style="color: white" align="left">
+                    <%= item.content%><br>
+                    <br><br>
                 </p>
-                <% if(viewer=='me'){%>
-                <% if(title=='My Posts'){%>
-                <a href="/main/profile/myposts/<%= item._id%>/edit"><button type="button" class="btn btn-success btn-group-sm">Edit</button></a>&nbsp &nbsp
-                <a href="/main/profile/myposts/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-group-sm">Delete</button></a>
+
+                <% item.fileField.forEach(function (file) {%>
+                <%if(file!==null){%>
+                <%files.forEach(function (file2) {%>
+                <%if(file._id!==undefined && file._id.toString()===file2._id.toString()){%>
+                <%if(file2.contentType=='image/png' || file2.contentType=='image/jpeg' || file2.contentType=='image/jpg'){%>
+                <a href="\main\image\<%=file2.filename%>"> <img height="350px" src="\main\image\<%=file2.filename%>" alt="image"></a><br>
+                <%}else if(file2.contentType=='video/mp4' || file2.contentType=='video/ogg' || file2.contentType=='video/webm'){%>
+                <video height="400px" controls><source src="\main\video\<%=file2.filename%>" type="<%=file2.contentType%>"></video><br>
+                <%}else if(file2.contentType==='application/pdf' || file2.contentType==='application/octet-stream' || file2.contentType==='text/plain' || file2.contentType==='application/x-zip-compressed'){%>
+                <a href="\main\document\<%=file2.filename%>"><%=file2.filename%></a><br>
+                <%}else{%>
+                <%=file2.filename%>
                 <%}%>
-                <% if(title=='Favourite Posts'){%>
-                    <a href="/main/profile/bookmarks/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-group-sm">Delete</button></a>
+                <br><br>
                 <%}%>
+
+
+                <%})%>
                 <%}%>
+                <%})%>
+                <a href="/main/<%= item._id%>/like"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.posts_liked.indexOf(item._id)!==-1){%>
+                            <i class="fa fa-thumbs-up"></i>
+                        <%}else{%>
+                            <i class="fa fa-thumbs-o-up"></i>
+                        <%}%>
+                    </button></a>&nbsp<%= item.no_of_likes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/dislike"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.posts_disliked.indexOf(item._id)===-1){%>
+                            <i class="fa fa-thumbs-o-down"></i>
+                        <%}else{%>
+                            <i class="fa fa-thumbs-down"></i>
+                        <%}%>
+                    </button></a>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/comments"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <i class="fa fa-comment"></i></button></a>&nbsp<%= item.no_of_comments%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/bookmark"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                        <% if(user.posts_bookmarked.indexOf(item._id)===-1){%>
+                            <i class="fa fa-star-o"></i>
+                        <%}else{%>
+                            <i class="fa fa-star"></i>
+                        <%}%>
+                    </button></a>
+          <!--  </li>-->
+       <!-- </div>-->
+        <br>
+
+
+
+
+
             </li>
         </div>
         <br>

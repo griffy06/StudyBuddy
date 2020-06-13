@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel="stylesheet" type="text/css" href="/stylesheets/style2.css">
-    <title>main</title>
+    <title><%=user.name%>'s Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -23,6 +23,10 @@
         .post{
             opacity:70%;
             height: 100%;
+        }
+        .center{
+            margin: auto;
+            text-align: center;
         }
     </style>
 
@@ -49,9 +53,9 @@
             <%}%>
         </ul>
         <ul class="navbar-nav rounded-right">
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="/main">Back<span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
+            <li class="nav-item">
+                <a class="nav-link" href="/<%=url%>">Back<span class="sr-only">(current)</span></a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
@@ -59,15 +63,16 @@
     </div>
 </nav>
 <%- messages('message', locals) %>
-<h1 align="center" style="color: white">Profile Details</h1>
-<div class="profilepic">
+<!--<h1 align="center" style="color: white">Profile Details</h1>-->
+<div class="center">
     <% var temp = files.find(function (value) { return value._id.toString()===user.pic })%>
     <figure>
-    <img style="height: 250px; width: 250px; margin-left: 20%;margin-top: 5%; border-radius: 50%" src="/main/image/<%=temp.filename%>" alt="profile pic">
-    <figcaption style="color: white; margin-left: 26.5%;margin-top: 1%">@<%=user.username%></figcaption>
+    <img style="height: 200px; width: 200px; border-radius: 50%" src="/main/image/<%=temp.filename%>" alt="profile pic">
     </figure>
 </div>
-<div class="login" style="margin-left: 5%">
+<br>
+<br>
+<div class="login class" style="margin-top: 0%">
     <form method="post" action="/main/editProfile">
         <% if(viewer=='me'){%>
         <label style="color:white">

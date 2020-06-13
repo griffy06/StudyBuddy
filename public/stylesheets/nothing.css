@@ -4,8 +4,8 @@
     opacity: .8;
 }
 .zen {
-    width: 30%;
-    height: 30%;
+    width: 25%;
+    height: 25%;
     position: relative;
     animation-name: floating;
     animation-duration: 2s;

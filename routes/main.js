@@ -66,8 +66,13 @@ router.get('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                                     else
                                     {
                                         //console.log(files);
-                                        res.render('posts', {files: files,post: post, course:course, current_course:req.params.id, user:req.user});
-                                        return;
+                                        User.find(function (err, users) {
+                                            if(err) console.log(err);
+                                            else
+                                                res.render('posts', {files: files,post: post, course:course, current_course:req.params.id, user:req.user, users:users});
+
+                                        })
+                                        //return;
                                     }
                                 })
 
@@ -108,6 +113,7 @@ router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50),
         p.author=req.user.name;
         p.authorid=req.user.username;
         p.no_of_comments=0;
+        p.topic = req.body.topic;
         p.content=req.body.content;
         p.tag = req.body.tags.split(',');
         Course.find({course_id:req.params.id},{},function(err1,course1){
@@ -720,6 +726,32 @@ router.get('/video/:filename', function (req,res) {
 
         //check if image
         if(file.contentType==='video/mp4' || file.contentType==='video/ogg' || file.contentType==='video/webm')
+        {
+            //read output to browser
+            const readStream = gfs.createReadStream(file.filename);
+            readStream.pipe(res);
+        }
+        else
+        {
+            return res.status(404).json({
+                err:'Not a video'
+            })
+        }
+    })
+
+
+})
+
+router.get('/document/:filename', function (req,res) {
+    gfs.files.findOne({filename: req.params.filename}, function (err,file) {
+        if(!file || file.length===0){
+            return res.status(404).json({
+                err:'No file exists'
+            })
+        }
+
+        //check if image
+        if(file.contentType==='application/pdf' || file.contentType==='application/octet-stream' || file.contentType==='text/plain' || file.contentType==='application/x-zip-compressed')
         {
             //read output to browser
             const readStream = gfs.createReadStream(file.filename);

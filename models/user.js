@@ -37,6 +37,10 @@ const UserSchema = mongoose.Schema({
     comments_disliked:{
         type:Array,
         required:false
+    },
+    pic:{
+        type:String,
+        required:false
     }
 });
 

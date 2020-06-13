@@ -13,7 +13,7 @@
     <script>
         setTimeout(function() {
             $("#messages").fadeOut().empty();
-        }, 1000);
+        }, 2000);
     </script>
 </head>
 <body>
@@ -40,12 +40,16 @@
 <%- messages('message', locals) %>
 <div class="register">
     <h1>Register</h1><br>
-    <form method="post" action="/register">
+    <form method="post" action="/register" enctype="multipart/form-data">
         <input type="text" name="name" placeholder="Name" required="required" />
         <input type="email" name="email" placeholder="Email" required="required" />
         <input type="text" name="username" placeholder="Username" required="required" />
         <input type="password" name="password" placeholder="Password" required="required" />
-        <input type="password" name="confirm" placeholder="Confirm Password" required="required" /><br><br>
+        <input type="password" name="confirm" placeholder="Confirm Password" required="required" /><br>
+        <label for="pic" style="color: white">Choose profile picture (optional)</label>
+        <div style="color: white">
+            <input type="file" name="pic" />
+        </div>
         <button type="submit" class="btn btn-primary btn-block btn-large">Join the club!</button>
     </form>
 </div>

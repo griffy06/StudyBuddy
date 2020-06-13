@@ -237,7 +237,12 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
 });
 router.get('/profile', ensureAuthenticated, function (req,res,next) {
         //console.log(req.user);
-        res.render('showProfile',{user:req.user,viewer:'me'});
+        global.gfs.files.find().toArray(function (err, files) {
+            if(err) console.log(err);
+            else
+                res.render('showProfile',{user:req.user,viewer:'me',files:files});
+        })
+
 });
 
 router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
@@ -552,7 +557,12 @@ router.get('/:id/viewAuthor', ensureAuthenticated, function (req,res) {
             console.log(err);
         }
         else {
-            res.render('showProfile',{user:user[0], viewer:'other'});
+            global.gfs.files.find.toArray(function (err, files) {
+                if(err) console.log(err);
+                else
+                    res.render('showProfile',{user:user[0], viewer:'other', files:files});
+            })
+           // res.render('showProfile',{user:user[0], viewer:'other'});
         }
     })
 });

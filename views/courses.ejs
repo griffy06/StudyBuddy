@@ -7,7 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/stylesheets/style5.css' />
-<!--    <link rel="stylesheet" href="/stylesheets/style.css">-->
+    <link href='https://fonts.googleapis.com/css?family=Basic' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
+    <!--    <link rel="stylesheet" href="/stylesheets/style.css">-->
     <title>Semester <%=sem%></title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -21,6 +23,14 @@
         }
         .course:hover{
             background-color: #ffffff;
+        }
+        .thead{
+            font-family: 'Basic';
+            font-size: 40px;
+        }
+        .tlist{
+            font-family: 'Cabin';
+            font-size: larger;
         }
     </style>
 </head>
@@ -80,14 +90,14 @@
 <%- messages('message', locals) %>
 <div class="container bg-dark" style="opacity: 90%;border-style: solid; border-color: white">
     <br>
-    <h1 align="center" style="color: white">Semester <%= sem%> Courses</h1>
+    <h1 class="thead" align="center" style="color: white">Semester <%= sem%> Courses</h1>
     <br>
 </div>
 <br>
 <div class="container">
         <% course.forEach(function(item){ %>
         <div class="course" align="center">
-        <li class="list-group-item bg-dark course">
+        <li class="list-group-item bg-dark course tlist">
                 <a href="/main/course/<%= item.course_id%>/view" style="color: white"><%= item.course_name%></a>
         </li>
         </div>

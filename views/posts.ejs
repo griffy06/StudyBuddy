@@ -9,6 +9,8 @@
     <link rel='stylesheet' href='/stylesheets/nothing.css' />
     <link href='https://fonts.googleapis.com/css?family=Atma' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Basic' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
     <title><%= current_course.course_name%> Posts</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -109,10 +111,18 @@
         }
         .heading{
             font-family: 'Aclonica';
-            font-size: xx-large;
+            font-size: x-large;
         }
         .blah{
             font-family: 'Atma';
+            font-size: medium;
+        }
+        .thead{
+            font-family: 'Basic';
+            font-size: 40px;
+        }
+        .tlist{
+            font-family:'Cabin';
             font-size: medium;
         }
     </style>
@@ -175,9 +185,10 @@
     </div>
 </nav>
 <%- messages('message', locals) %>
-<div class="container bg-dark" style="opacity: 90%;border-style: solid; border-color: white">
+<div class="container bg-dark" align="center" style="opacity: 90%;border-style: solid; border-color: white">
     <br>
-    <h1 align="center" style="color: white"><%= current_course.course_name%> Posts</h1>
+    <h1 class="thead" align="center" style="color: white">    <%= current_course.course_name%> Posts
+    </h1>
     <br>
 </div>
 
@@ -233,11 +244,11 @@
                     <%}else{%>
                         <img style="height: 45px; width: 45px;border-radius: 50%" src="\images\profile.png" alt="image">
                     <%}%>
-                    <div class="wrapper">
+                    <div class="wrapper tlist">
                         <span class="Name">
                             <%= item.author%><br>
                             <span class="ID">
-                                <a href="/main/course/<%= item.course_id%>/view/<%= item.authorid%>/viewAuthor" style="font-size: small">@<%= item.authorid%></a>
+                                <a href="/main/course/<%= item.course_id%>/view/<%= item.authorid%>/viewAuthor" style="font-family:Calibri ,font-size: small">@<%= item.authorid%></a>
                             </span>
                         </span>
                     </div>

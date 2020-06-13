@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/stylesheets/nothing.css' />
+    <link href='https://fonts.googleapis.com/css?family=Atma' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
     <title><%= current_course.course_name%> Posts</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -104,6 +106,14 @@
         }
         .ID {
             margin-left: 0px;
+        }
+        .heading{
+            font-family: 'Aclonica';
+            font-size: xx-large;
+        }
+        .blah{
+            font-family: 'Atma';
+            font-size: medium;
         }
     </style>
     <script>
@@ -232,8 +242,9 @@
                         </span>
                     </div>
                 </div>
-                <span><h2 align="center">'<%=item.topic%>'</h2></span>
-                <p style="color: white" align="left">
+                <span align="center" class="heading"><%=item.topic%></span>
+                <p class="blah" style="color: white" align="left">
+                    <br>
                     <%= item.content%><br>
                     <br><br>
                 </p>
@@ -253,8 +264,6 @@
                                 <%}%>
             <br><br>
                             <%}%>
-
-
                     <%})%>
                     <%}%>
                     <%})%>
@@ -290,7 +299,7 @@
 <br>
     <button type="button" onclick="myFunction()" class="btn btn-primary btn-group-sm waves-effect fixed_button2"><i class="fa fa-pencil" style="font-size:25px"></i></button></a>
     <div class="container" id="hide">
-        <form method="post" action="/main/course/<%= current_course._id%>/create" enctype="multipart/form-data">
+        <form method="post" action="/main/course/<%= current_course.course_id%>/create" enctype="multipart/form-data">
             <div class="form-group">
                 <textarea type="text" class="form-control" id="topic" name="topic" placeholder="Enter title" ></textarea>
             </div>

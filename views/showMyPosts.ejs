@@ -150,6 +150,7 @@
 <div class="container">
     <br>
     <% if(post!=undefined){post.forEach(function(item){ %>
+
         <div class="post" align="center" style="color: white">
             <li class="list-group-item bg-dark post">
                 <% if(viewer=='me'){%>
@@ -164,10 +165,13 @@
                         <a href="/main/profile/bookmarks/<%= item._id%>/delete"><button type="button" class="btn btn-danger btn-group-sm">Delete from favorites</button></a>
                         </div>
                         <%}%>
-                <%}%>
+                <%}else{%>
+                    <p><br></p>
+                        <%}%>
 
                 <!--------------------------------------------------------------------->
                 <div class="Author" align="left" style="margin-top: -3%">
+
                     <% var userobj = users.find(obj=>{ return obj.username===item.authorid})%>
                     <%if(userobj.pic!==undefined && userobj.pic!==null){%>
                     <%console.log(userobj.pic)%>

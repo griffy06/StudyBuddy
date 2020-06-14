@@ -926,6 +926,48 @@ router.post('/profile/myposts/:id/edit/addfiles', upload.array('files', 50), ens
     })
 })
 
+router.post('/editProfile/removepic', ensureAuthenticated, function (req, res) {
+    global.gfs.files.find().toArray(function (err, files) {
+        if(err) console.log(err);
+        else
+        {
+            files.forEach(function (file) {
+                if(file._id.toString === req.user.pic)
+                {
+                    gfs.remove({_id: file._id, root: 'uploads'}, function (err, gridStore) {
+                        if (err) console.log(err);
+                    })
+                }
+            })
+            req.user.pic=null;
+            User.update({_id:req.user._id},req.user,function (err) {
+                if(err) console.log(err);
+                res.redirect('/main/profile');
+            })
+        }
+    })
+})
+
+router.post('/editProfile/updatepic', upload.single('pic'), ensureAuthenticated, function (req,res) {
+
+    global.gfs.files.find().toArray(function (err, files) {
+        files.forEach(function (file) {
+            if(file._id === req.user.pic)
+            {
+                gfs.remove({_id: file._id, root: 'uploads'}, function (err, gridStore) {
+                    if (err) console.log(err);
+                })
+            }
+        })
+    })
+
+    req.user.pic = req.file.id;
+    User.update({_id:req.user._id},req.user,function (err) {
+        if(err) console.log(err);
+        res.redirect('/main/profile');
+    })
+})
+
 function ensureAuthenticated(req,res,next)
 {
     if(req.isAuthenticated()) {

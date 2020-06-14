@@ -74,7 +74,6 @@ router.post('/register', function(req,res) {
         })}
         return res.render('register');
       }
-      let arr=[];
       // console.log('that is'+arr);
 
       var pic;
@@ -93,39 +92,43 @@ router.post('/register', function(req,res) {
         password: password,
         pic: pic
       });
-     // if (req.file.contentType === 'image/jpeg' || req.file.contentType === 'image/jpg' || req.file.contentType === 'image/png' || req.file.contentType === 'image/gif') {
         bcrypt.genSalt(10, function (err, salt) {
           bcrypt.hash(newUser.password, salt, function (err, hash) {
             if (err) {
               console.log(err);
             } else {
               newUser.password = hash;
-              if(arr.length==1){
-                req.flash('danger', 'User Already Exists!');
-                if (req.file!==undefined){
-                  gfs.remove({_id: req.file.id, root: 'uploads'}, function (err, gridStore) {
-                    if (err) console.log(err);
-                  })}
-                return res.redirect('/register');
-              }
-              else if(password.length<8){
-                req.flash('danger', 'Password must be minimum 8 characters.');
-                if (req.file!==undefined){
-                  gfs.remove({_id: req.file.id, root: 'uploads'}, function (err, gridStore) {
-                    if (err) console.log(err);
-                  })}
-                return res.redirect('/register');
-              }
-              else{
-                newUser.save(function (err) {
-                  if (err) {
-                    console.log(err);
-                  } else {
-                    req.flash('success', 'Successfully registered... Kindly Login!');
-                    res.redirect('/login');
-                  }
-                });
-              }
+              User.find({username:newUser.username},{},function(err,user){
+                if(err){
+                  console.log(err);
+                }
+                else if(user.length>=1){
+                  req.flash('danger', 'User Already Exists!');
+                  if (req.file!==undefined){
+                    gfs.remove({_id: req.file.id, root: 'uploads'}, function (err, gridStore) {
+                      if (err) console.log(err);
+                    })}
+                  return res.redirect('/register');
+                }
+                else if(password.length<8){
+                  req.flash('danger', 'Password must be minimum 8 characters.');
+                  if (req.file!==undefined){
+                    gfs.remove({_id: req.file.id, root: 'uploads'}, function (err, gridStore) {
+                      if (err) console.log(err);
+                    })}
+                  return res.redirect('/register');
+                }
+                else{
+                  newUser.save(function (err) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      req.flash('success', 'Successfully registered... Kindly Login!');
+                      res.redirect('/login');
+                    }
+                  });
+                }
+              })
             }
           });
         });

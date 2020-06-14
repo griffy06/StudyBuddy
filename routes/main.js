@@ -23,7 +23,8 @@ const storage = new GridFsStorage({
                 if (err) {
                     return reject(err);
                 }
-                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const filename = file.originalname;
+                //const filename = buf.toString('hex') + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
                     bucketName: 'uploads',
@@ -36,6 +37,17 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
+const upload2 = multer({
+    storage: storage,
+    fileFilter: function (req, file, callback) {
+        var ext = path.extname(file.originalname);
+        if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+            //req.flash('danger', 'Only images are allowed as file types!');
+            return callback(new Error('Only images are allowed'))
+        }
+        callback(null, true);
+    }
+}).single('pic');
 
 router.get('/', ensureAuthenticated, function (req,res,next) {
     res.render('main');
@@ -910,113 +922,107 @@ router.post('/editProfile/removepic', ensureAuthenticated, function (req, res) {
     })
 })
 
-router.post('/editProfile/updatepic', upload.single('pic'), ensureAuthenticated, function (req,res) {
+router.post('/editProfile/updatepic', ensureAuthenticated, function (req,res) {
+    upload2(req, res, function (err) {
+        if (err) {
+            req.flash('danger', 'Only images are allowed as file types!');
+            return res.redirect('/main/profile');
+        } else {
+            global.gfs.files.find().toArray(function (err, files) {
+                files.forEach(function (file) {
+                    if (file._id === req.user.pic) {
+                        gfs.remove({_id: file._id, root: 'uploads'}, function (err, gridStore) {
+                            if (err) console.log(err);
+                        })
+                    }
+                })
+            })
 
-    global.gfs.files.find().toArray(function (err, files) {
-        files.forEach(function (file) {
-            if(file._id === req.user.pic)
-            {
-                gfs.remove({_id: file._id, root: 'uploads'}, function (err, gridStore) {
-                    if (err) console.log(err);
+            req.user.pic = req.file.id;
+            User.update({_id: req.user._id}, req.user, function (err) {
+                if (err) console.log(err);
+                res.redirect('/main/profile');
+            })
+        }
+    })
+
+})
+    function ensureAuthenticated(req, res, next) {
+        if (req.isAuthenticated()) {
+            return next();
+        } else {
+            req.flash('danger', 'Not logged in!');
+            res.redirect('/login');
+        }
+    }
+
+    router.get('/image/:filename', function (req, res) {
+        gfs.files.findOne({filename: req.params.filename}, function (err, file) {
+            if (!file || file.length === 0) {
+                return res.status(404).json({
+                    err: 'No file exists'
+                })
+            }
+
+            //check if image
+            if (file.contentType === 'image/jpeg' || file.contentType === 'image/jpg' || file.contentType === 'image/png') {
+                //read output to browser
+                const readStream = gfs.createReadStream(file.filename);
+                readStream.pipe(res);
+            } else {
+                return res.status(404).json({
+                    err: 'Not an image'
                 })
             }
         })
+
+
     })
 
-    req.user.pic = req.file.id;
-    User.update({_id:req.user._id},req.user,function (err) {
-        if(err) console.log(err);
-        res.redirect('/main/profile');
-    })
-})
+    router.get('/video/:filename', function (req, res) {
+        gfs.files.findOne({filename: req.params.filename}, function (err, file) {
+            if (!file || file.length === 0) {
+                return res.status(404).json({
+                    err: 'No file exists'
+                })
+            }
 
-function ensureAuthenticated(req,res,next)
-{
-    if(req.isAuthenticated()) {
-        return next();
-    }
-    else {
-        req.flash('danger','Not logged in!');
-        res.redirect('/login');
-    }
-}
+            //check if image
+            if (file.contentType === 'video/mp4' || file.contentType === 'video/ogg' || file.contentType === 'video/webm') {
+                //read output to browser
+                const readStream = gfs.createReadStream(file.filename);
+                readStream.pipe(res);
+            } else {
+                return res.status(404).json({
+                    err: 'Not a video'
+                })
+            }
+        })
 
-router.get('/image/:filename', function (req,res) {
-    gfs.files.findOne({filename: req.params.filename}, function (err,file) {
-        if(!file || file.length===0){
-            return res.status(404).json({
-                err:'No file exists'
-            })
-        }
 
-        //check if image
-        if(file.contentType==='image/jpeg' || file.contentType==='image/jpg' || file.contentType==='image/png')
-        {
-            //read output to browser
-            const readStream = gfs.createReadStream(file.filename);
-            readStream.pipe(res);
-        }
-        else
-        {
-            return res.status(404).json({
-                err:'Not an image'
-            })
-        }
     })
 
+    router.get('/document/:filename', function (req, res) {
+        gfs.files.findOne({filename: req.params.filename}, function (err, file) {
+            if (!file || file.length === 0) {
+                return res.status(404).json({
+                    err: 'No file exists'
+                })
+            }
 
-})
+            //check if image
+            if (file.contentType === 'application/pdf' || file.contentType === 'application/octet-stream' || file.contentType === 'text/plain' || file.contentType === 'application/x-zip-compressed') {
+                //read output to browser
+                const readStream = gfs.createReadStream(file.filename);
+                readStream.pipe(res);
+            } else {
+                return res.status(404).json({
+                    err: 'Not a video'
+                })
+            }
+        })
 
-router.get('/video/:filename', function (req,res) {
-    gfs.files.findOne({filename: req.params.filename}, function (err,file) {
-        if(!file || file.length===0){
-            return res.status(404).json({
-                err:'No file exists'
-            })
-        }
 
-        //check if image
-        if(file.contentType==='video/mp4' || file.contentType==='video/ogg' || file.contentType==='video/webm')
-        {
-            //read output to browser
-            const readStream = gfs.createReadStream(file.filename);
-            readStream.pipe(res);
-        }
-        else
-        {
-            return res.status(404).json({
-                err:'Not a video'
-            })
-        }
     })
-
-
-})
-
-router.get('/document/:filename', function (req,res) {
-    gfs.files.findOne({filename: req.params.filename}, function (err,file) {
-        if(!file || file.length===0){
-            return res.status(404).json({
-                err:'No file exists'
-            })
-        }
-
-        //check if image
-        if(file.contentType==='application/pdf' || file.contentType==='application/octet-stream' || file.contentType==='text/plain' || file.contentType==='application/x-zip-compressed')
-        {
-            //read output to browser
-            const readStream = gfs.createReadStream(file.filename);
-            readStream.pipe(res);
-        }
-        else
-        {
-            return res.status(404).json({
-                err:'Not a video'
-            })
-        }
-    })
-
-
-})
 
 module.exports = router;

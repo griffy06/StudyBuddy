@@ -287,26 +287,32 @@ router.get('/course/:id/view/profile', ensureAuthenticated, function (req,res,ne
 
 
 router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
-    if(req.body.name=='') {
-        req.user.name = req.user.name;
-    }
-    else{
-        var name=req.user.name;
+    var original=req.user.username;
+    var updated=req.body.username;
+    if(req.body.name!=='') {
         req.user.name = req.body.name;
-        Post.find({author:name},{},function(err,post){
-            console.log('this is'+post);
+        Post.find({authorid:req.user.username},{},function(err,post){
             if(err){
                 return;
             }
             else{
                 post.forEach(function (item) {
-                    item.authorid=item.authorid;
                     item.author = req.body.name;
-                    item.no_of_likes=item.no_of_likes;
-                    item.no_of_dislikes=item.no_of_dislikes;
-                    item.no_of_comments=item.no_of_comments;
-                    item.content=item.content;
-                    item.tag=item.tag;
+                    item.save(function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                })
+            }
+        })
+        Comment.find({authorid:req.user.username},{},function(err,post){
+            if(err){
+                return;
+            }
+            else{
+                post.forEach(function (item) {
+                    item.author = req.body.name;
                     item.save(function (err) {
                         if (err) {
                             console.log(err);
@@ -317,95 +323,210 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
         })
     }
 
-    if(req.body.email=='') {
-        req.user.email = req.user.email;
-    }
-    else{
+    if(req.body.email!=='') {
         req.user.email = req.body.email;
     }
 
-    if(req.body.username=='') {
-        req.user.username = req.user.username;
-    }
-
-    else{
-            var username=req.user.username;
-            req.user.username = req.body.username;
-            console.log(req.body.username);
-            Post.find({authorid:username},{},function(err,post){
-                console.log('this is'+post);
-                if(err){
-                    return;
-                }
-                else{
-                    post.forEach(function (item) {
-                        console.log(post);
-                        item.authorid= req.body.username;
-                        item.author = item.author;
-                        item.no_of_likes=item.no_of_likes;
-                        item.no_of_dislikes=item.no_of_dislikes;
-                        item.no_of_comments=item.no_of_comments;
-                        item.content=item.content;
-                        item.tag=item.tag;
-                        item.save(function (err) {
-                            if (err) {
-                                console.log(err);
-                            }
-                        });
-                    })
-
-                }
-            })
-
-        Comment.find({authorid:username},{},function(err,post){
-            console.log('this is'+post);
+    if(req.body.username!=='') {
+        var username=req.user.username;
+        User.find({username:req.body.username},{},function (err,user) {
+            console.log(user.length);
             if(err){
-                return;
+                console.log(err);
             }
-            else{
-                post.forEach(function (item) {
-                    console.log(post);
-                    item.authorid= req.body.username;
-                    item.save(function (err) {
-                        if (err) {
-                            console.log(err);
-                        }
-                    });
+            else if(user.length==0){
+                console.log('here');
+                Post.find({authorid:username},{},function(err,post){
+                    console.log('this is'+post);
+                    if(err){
+                        return;
+                    }
+                    else{
+                        post.forEach(function (item) {
+                            console.log(post);
+                            item.authorid= req.body.username;
+                            item.save(function (err) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                            });
+                        })
+                    }
+                })
+
+                Comment.find({authorid:username},{},function(err,post){
+                    console.log('this is'+post);
+                    if(err){
+                        return;
+                    }
+                    else{
+                        post.forEach(function (item) {
+                            console.log(post);
+                            item.authorid= req.body.username;
+                            item.save(function (err) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                            });
+                        })
+                    }
                 })
             }
         })
     }
+    if(req.body.password!==''){
+        if(req.body.password.length>=8){
+            req.user.password=req.body.password;
+            bcrypt.genSalt(10, function (err, salt) {
+                bcrypt.hash(req.user.password, salt, function (err, hash) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        req.user.password = hash;
+                        if(req.body.username!==''){
+                            User.find({username:req.body.username},{},function (err,user) {
+                                if(user.length==0)
+                                {
+                                    req.user.username=updated;
+                                    console.log(user);
+                                    req.user.save(function (err) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        else{
+                                            req.flash('success', 'Successfully Updated Profile!');
+                                            res.redirect('/main/profile');
+                                        }
+                                    })
+                                }
+                                else{
+                                    req.user.save(function (err) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        else{
+                                            console.log(req.user.username);
+                                            req.flash('danger', 'Username not Available.');
+                                            req.flash('success', 'Other Details Updated!');
+                                            res.redirect('/main/profile');
+                                        }
+                                    })
+                                }
+                            });
+                        }
 
-    if(req.body.password=='') {
-        req.user.save(function (err) {
-            if (err) {
-                console.log(err);
-            } else {
-                req.flash('success', 'Successfully Updated Profile!');
-                res.redirect('/main/profile');
+                        else
+                        {
+                            req.user.save(function (err) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                                else{
+                                    req.flash('success', 'Successfully Updated Profile!');
+                                    res.redirect('/main/profile');
+                                }
+                            })
+                        }
+                    }
+                });
+            });
+        }
+        else{
+            if(req.body.username!==''){
+                User.find({username:req.body.username},{},function (err,user) {
+                    if(user.length==0)
+                    {
+                        req.user.username=updated;
+                        console.log(user);
+                        req.user.save(function (err) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            else{
+                                req.flash('danger', 'Password must contain minimum 8 characters');
+                                req.flash('success', 'Other Details Updated!');
+                                res.redirect('/main/profile');
+                            }
+                        })
+                    }
+                    else{
+                        req.user.save(function (err) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            else{
+                                console.log(req.user.username);
+                                req.flash('danger', 'Password must contain minimum 8 characters');
+                                req.flash('success', 'Other Details Updated!');
+                                res.redirect('/main/profile');
+                            }
+                        })
+                    }
+                });
             }
-        });
+
+            else
+            {
+                req.user.save(function (err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else{
+                        req.flash('danger', 'Password must contain minimum 8 characters');
+                        req.flash('success', 'Other Details Updated!');
+                        res.redirect('/main/profile');
+                    }
+                })
+            }
+        }
     }
 
-    else {
-        req.user.password = req.body.password;
-        bcrypt.genSalt(10, function (err, salt) {
-            bcrypt.hash(req.user.password, salt, function (err, hash) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    req.user.password = hash;
+    else
+    {
+        if(req.body.username!==''){
+            User.find({username:req.body.username},{},function (err,user) {
+                if(user.length==0)
+                {
+                    req.user.username=updated;
+                    console.log(user);
                     req.user.save(function (err) {
                         if (err) {
                             console.log(err);
-                        } else {
+                        }
+                        else{
                             req.flash('success', 'Successfully Updated Profile!');
                             res.redirect('/main/profile');
                         }
-                    });
+                    })
+                }
+                else{
+                    req.user.save(function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        else{
+                            console.log(req.user.username);
+                            req.flash('danger', 'Username not Available!');
+                            req.flash('success', 'Other Details Updated!');
+                            res.redirect('/main/profile');
+                        }
+                    })
                 }
             });
-        });
+        }
+
+        else
+        {
+            req.user.save(function (err) {
+                if (err) {
+                    console.log(err);
+                }
+                else{
+                    req.flash('success', 'Successfully Updated Profile!');
+                    res.redirect('/main/profile');
+                }
+            })
+        }
     }
 })
 

@@ -6,6 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <title>Edit Post</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -17,6 +19,15 @@
         body {
             background-color: #a4a5a7;
             background: linear-gradient(180deg, #76777a 0%, #39393c 37%, #000108 100%) fixed;
+        }
+        .btn-fixed
+        {
+            position: fixed;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            right:10px;
+            bottom: 10px;
         }
 
         </style>
@@ -72,12 +83,11 @@
             <textarea type="text" class="form-control" id="tags" name="tags" ><%= post.tag%></textarea>
         </div><br>
         <div align="center">
-            <button type="submit" class="btn btn-success">Save Changes</button>
+            <button type="submit" class="btn btn-success btn-fixed"><i class="fa fa-check" style="font-size: x-large"></i></button>
         </div>
-
-    </form><br><br>
+    </form><br>
         <div align="center">
-            <h5>Make changes to the attached files:</h5><br>
+            <h5>Make changes to the attached files:</h5>
         <!--    <textarea type="" class="form-control" id="tags" name="tags" ><%= post.tag%></textarea>-->
         </div>
     <div align="center">
@@ -90,9 +100,8 @@
                 </form>
                 <%}%>
             <%})%>
-
         <%})%>
-        <br><br></div>
+        <br></div>
 
 </div>
 <script src='/bower_components/jquery/dist/jquery.js'></script>

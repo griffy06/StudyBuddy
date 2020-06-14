@@ -130,7 +130,6 @@ input[type=reset]:active {
     transform-origin: top center;
 }
 .spine, .right::after, .contents h1 {
-    font-family: "Helvetica Neue", serif;
     font-weight: bold;
     -webkit-font-smoothing: antialiased;
 }
@@ -145,20 +144,24 @@ input[type=reset]:active {
     white-space: nowrap;
     width: 0;
     height: 16px;
+    margin: auto;
 }
 .cover {
     background-color: #fff;
     z-index: 1;
+    margin: auto;
 }
 .contents {
     font-size: 11.2px;
-    padding: 16px;
+    padding-top: 35px;
+    margin: auto;
 }
 .contents h1 {
     font-size: 2em;
+    margin: auto;
 }
 .contents p {
-    font-family: "Helvetica Neue", serif;
+    margin: auto;
 }
 .b1 {
     display: block;
@@ -166,6 +169,7 @@ input[type=reset]:active {
 }
 .b1 .block-inner > div {
     background-color: #e5e1e0;
+    margin: auto;
 }
 .b1 .block-inner > div.top, .b1 .block-inner > div.bottom {
     width: 352px;

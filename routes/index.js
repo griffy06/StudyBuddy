@@ -57,13 +57,23 @@ router.post('/register', function(req,res) {
   upload(req,res, function (err) {
     if (err) {
       req.flash('danger', 'Only images are allowed as file types!');
-      res.redirect('/register');
+      return res.redirect('/register');
     } else {
       const name = req.body.name;
       const email = req.body.email;
       const username = req.body.username;
       const password = req.body.password;
-      //const confirm = req.body.confirm;
+      const confirm = req.body.confirm;
+      req.checkBody('confirm', 'Passwords do not match').equals(req.body.password);
+      let errors = req.validationErrors();
+      if(errors){
+        req.flash('danger', 'Passwords do not match');
+        if (req.file!==undefined){
+        gfs.remove({_id: req.file.id, root: 'uploads'}, function (err, gridStore) {
+          if (err) console.log(err);
+        })}
+        return res.render('register');
+      }
       var pic;
       if(req.file!==undefined) {
         pic = req.file.id;
@@ -93,7 +103,7 @@ router.post('/register', function(req,res) {
                 } else {
 
                   req.flash('success', 'Successfully registered!');
-                  res.redirect('/');
+                  return res.redirect('/');
                 }
               });
             }

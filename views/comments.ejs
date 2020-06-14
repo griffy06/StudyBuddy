@@ -7,6 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/stylesheets/nothing.css' />
+    <link href='https://fonts.googleapis.com/css?family=Atma' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Basic' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
     <title>Comments!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -21,7 +25,7 @@
             background: linear-gradient(180deg, #76777a 0%, #39393c 37%, #000108 100%) fixed;
         }
         .post{
-            opacity:90%;
+            opacity:100%;
             height: 100%;
         }
         .btn-circle{
@@ -76,6 +80,37 @@
             display: none;
             opacity: 70%;
         }
+        .Author {
+            display: flex;
+        }
+
+        .wrapper {
+            display: flex;
+            align: left;
+        }
+
+        .Name{
+            margin-left: 15px;
+        }
+        .ID {
+            margin-left: 0px;
+        }
+        .heading{
+            font-family: 'Aclonica';
+            font-size: x-large;
+        }
+        .blah{
+            font-family: 'Atma';
+            font-size: medium;
+        }
+        .thead{
+            font-family: 'Basic';
+            font-size: 40px;
+        }
+        .tlist{
+            font-family:'Cabin';
+            font-size: medium;
+        }
     </style>
     <script>
         function myFunction(x) {
@@ -112,7 +147,7 @@
 <%- messages('message', locals) %>
 <div class="container bg-dark" style="opacity: 90%;border-style: solid; border-color: white">
     <br>
-    <h1 align="center" style="color: white">Comments!</h1>
+    <h1 class="thead" align="center" style="color: white">Comments!</h1>
     <br>
 </div>
 <br>
@@ -159,11 +194,32 @@
     <% if(comments!=undefined){comments.forEach(function(item){ %>
         <div class="post" align="center" style="color: white">
             <li class="list-group-item bg-dark post">
-                <p style="color: white" align="left">
-                    <%= item.content%><br>
-                    Written by: <%= item.author%> <a href="/main/<%=postid%>/comments/<%= item.authorid%>/viewAuthor">
-                        @<%= item.authorid%>
-                    </a><br><br><br>
+
+                <div class="Author" align="left">
+                    <%console.log(users)%>
+                    <% var userobj = users.find(obj=>{ return obj.username===item.authorid})%>
+                    <%console.log(userobj)%>
+                    <%if(userobj.pic!==undefined && userobj.pic!==null){%>
+
+                    <% var fileobj = files.find(obj=>{ return obj._id.toString()===userobj.pic})%>
+                    <img style="height: 45px;width: 45px; border-radius: 50%;" src="\main\image\<%=fileobj.filename%>" alt="image">
+                    <%}else{%>
+                        <img style="height: 45px; width: 45px;border-radius: 50%" src="\images\profile.png" alt="image">
+                    <%}%>
+                    <div class="wrapper tlist">
+                        <span class="Name">
+                            <%= item.author%><br>
+                            <span class="ID">
+                                <a href="/main/course/<%= item.course_id%>/view/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                <p class="blah" style="color: white; margin-left: 72px; margin-right: 72px" align="justify">
+                    <br>
+                    <%= item.content%>
+                    <br>
                 </p>
                 <a href="/main/<%= item._id%>/commentLike"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
                         <% if(user.comments_liked.indexOf(item._id)!==-1){%>

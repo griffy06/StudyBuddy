@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
+    <link href='https://fonts.googleapis.com/css?family=Atma' rel='stylesheet'>
     <link rel='stylesheet' href='/stylesheets/style4.css' />
     <link rel='stylesheet' href='/stylesheets/style5.css' />
     <title>Semesters</title>
@@ -15,6 +16,15 @@
             $("#messages").fadeOut().empty();
         }, 1000);
     </script>
+    <style>
+        .styleit{
+            font-family: Atma;
+            margin: auto;
+        }
+        span{
+            font-family: Atma;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -31,7 +41,7 @@
         <li></li>
     </ul>
 </div>
-<form class="container"><input type="radio" name="title" id="book1" /><input type="radio" name="title" id="book2" /><input type="radio" name="title" id="book3" /><input type="radio" name="title" id="book4" /><input type="radio" name="title" id="book5" /><input type="radio" name="title"
+<form class="container styleit"><input type="radio" name="title" id="book1" /><input type="radio" name="title" id="book2" /><input type="radio" name="title" id="book3" /><input type="radio" name="title" id="book4" /><input type="radio" name="title" id="book5" /><input type="radio" name="title"
                                                                                                                                                                                                                                                                      id="book6" /><input type="radio" name="title" id="book7" /><input type="radio" name="title" id="book8" /><input type="radio" name="title" id="book9" /><input type="radio" name="title" id="book10" /><input type="radio" name="title" id="book11" />
     <div
             class="surface">
@@ -85,10 +95,11 @@
                 <div class="top"></div>
             </div>
         </div><label class="block b6" for="book1">
-            <div class="block-inner"><div class="back"></div>
-                <div class="bottom"></div><div class="front" ><div class="spine" >College Life: Volume 1
+            <div class="block-inner styleit"><div class="back"></div>
+                <div class="bottom"></div><div class="front" ><div class="spine styleit" >College Life: Volume 1
                     </div></div><div class="left"></div>
-                <div class="right" data-title="A New Life Begins..."><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><a href="/main/1"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 1 &raquo;</button></a></div></div><div class="top"></div></div></label>
+                <div class="right" data-title="A New Life Begins..."><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><p>
+                            <br><a href="/main/1"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 1 &raquo;</button></a></p></div></div><div class="top"></div></div></label>
         <label
                 class="block b7" for="book2">
             <div class="block-inner">
@@ -102,7 +113,10 @@
                     <div class="cover"></div>
                     <div class="contents" align="center">
                         <h1>Take Me To</h1>
+                        <p>
+                            <br>
                         <a href="/main/2"><button align="center" type="button" class="btn btn-sm btn-primary">Semester 2 &raquo;</button></a>
+                        </p>
                     </div>
                 </div>
                 <div class="top"></div>
@@ -116,7 +130,9 @@
                     <div class="spine">College Life: Volume 3</div>
                 </div>
                 <div class="left"></div>
-                <div class="right" data-title="Plus a lot Of Fun and Friends..."><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><a href="/main/3"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 3 &raquo;</button></a></div></div><div class="top"></div></div></label>
+                <div class="right" data-title="Plus a lot Of Fun and Friends..."><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><p>
+                            <br><a href="/main/3"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 3 &raquo;</button></a>
+                        </p></div></div><div class="top"></div></div></label>
         <label
                 class="block b9" for="book4">
             <div class="block-inner">
@@ -130,12 +146,18 @@
                     <div class="cover"></div>
                     <div class="contents"align="center">
                         <h1>Take Me To</h1>
-                        <a href="/main/4"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 4 &raquo;</button></a>
+                        <p>
+                            <br>
+                            <a href="/main/4"><button type="button" class="btn btn-sm btn-primary"> Semester 4 &raquo;</button></a>
+                        </p>
                     </div>
                 </div>
                 <div class="top"></div>
             </div>
-        </label><label class="block b10" for="book5"><div class="block-inner"><div class="back"></div><div class="bottom"></div><div class="front"><div class="spine">College Life: Volume 5</div></div><div class="left"></div><div class="right" data-title="Copying Assignments, Ditching Labs!"><div class="cover"></div><div class="contents" align="center"><h1>Take Me To </h1><a href="/main/5"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 5 &raquo;</button></a></div></div><div class="top"></div></div></label>
+        </label><label class="block b10" for="book5"><div class="block-inner"><div class="back"></div><div class="bottom"></div><div class="front"><div class="spine">College Life: Volume 5</div></div><div class="left"></div><div class="right" data-title="Copying Assignments, Ditching Labs!"><div class="cover"></div><div class="contents" align="center"><h1>Take Me To </h1>
+                        <p>
+                            <br><a href="/main/5"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 5 &raquo;</button>
+                            </a></p></div></div><div class="top"></div></div></label>
         <label
                 class="block b11" for="book6">
             <div class="block-inner">
@@ -149,12 +171,17 @@
                     <div class="cover"></div>
                     <div class="contents" align="center">
                         <h1>Take Me To</h1>
+                        <p>
+                            <br>
                         <a href="/main/6"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 6 &raquo;</button></a>
+                        </p>
                     </div>
                 </div>
                 <div class="top"></div>
             </div>
-        </label><label class="block b12" for="book7"><div class="block-inner"><div class="back"></div><div class="bottom"></div><div class="front"><div class="spine">College Life: Volume 7</div></div><div class="left"></div><div class="right" data-title="3 letters        FUN"><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><a href="/main/7"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 7 &raquo;</button></a></div></div><div class="top"></div></div></label>
+        </label><label class="block b12" for="book7"><div class="block-inner"><div class="back"></div><div class="bottom"></div><div class="front"><div class="spine">College Life: Volume 7</div></div><div class="left"></div><div class="right" data-title="3 letters        FUN"><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><p>
+                            <br><a href="/main/7"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 7 &raquo;</button></a>
+                        </p></div></div><div class="top"></div></div></label>
         <label
                 class="block b13" for="book8">
             <div class="block-inner">
@@ -168,13 +195,18 @@
                     <div class="cover"></div>
                     <div class="contents"align="center">
                         <h1>Take Me To</h1>
+                        <p>
+                            <br>
                         <a href="/main/8"><button align="center" type="button" class="btn btn-sm btn-primary"> Semester 8 &raquo;</button></a>
+                        </p>
                     </div>
                 </div>
                 <div class="top"></div>
             </div>
         </label>
-        <label class="block b14" for="book9"><div class="block-inner"><div class="back"></div><div class="bottom"></div><div class="front"><div class="spine">Web Development</div></div><div class="left"></div><div class="right" data-title="Served Fresh From StackOverflow"><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><br><br><a href="#"><button align="center" type="button" class="btn btn-sm btn-primary"> WebWorld &raquo;</button></a></div></div><div class="top"></div></div></label>
+        <label class="block b14" for="book9"><div class="block-inner"><div class="back"></div><div class="bottom"></div><div class="front"><div class="spine">Web Development</div></div><div class="left"></div><div class="right" data-title="Served Fresh From StackOverflow"><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><p>
+                            <br><a href="#"><button align="center" type="button" class="btn btn-sm btn-primary"> WebWorld &raquo;</button></a>
+                        </p></div></div><div class="top"></div></div></label>
         <label
                 class="block b15" for="book10">
             <div class="block-inner">
@@ -188,13 +220,17 @@
                     <div class="cover"></div>
                     <div class="contents" align="center">
                         <h1>Take Me To</h1>
+                        <p>
+                            <br>
                         <a href="#"><button align="center" type="button" class="btn btn-sm btn-primary">CodeWorld &raquo;</button></a>
-
+                        </p>
                     </div>
                 </div>
                 <div class="top"></div>
             </div>
-        </label><label class="block b16" for="book11"><div class="block-inner"><div class="back"></div><div class="bottom"></div><div class="front"><div class="spine">Add Ons</div></div><div class="left"></div><div class="right" data-title="The Side Dish"><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><a href="#"><button align="center" type="button" class="btn btn-sm btn-primary"> Add Ons &raquo;</button></a></div></div><div class="top"></div></div></label></div>
+        </label><label class="block b16" for="book11"><div class="block-inner"><div class="back"></div><div class="bottom"></div><div class="front"><div class="spine">Add Ons</div></div><div class="left"></div><div class="right" data-title="The Side Dish"><div class="cover"></div><div class="contents" align="center"><h1>Take Me To</h1><p>
+                            <br><a href="#"><button align="center" type="button" class="btn btn-sm btn-primary"> Add Ons &raquo;</button></a>
+                        </p></div></div><div class="top"></div></div></label></div>
     <input type="reset" value="Try Another" /></form>
 <nav class="navbar navbar-expand-md navbar-dark bg-transparent">
     <a class="navbar-brand" href="/"><img src="/images/logo2.png" height="55" width="80" border-radius="50%"></img></a>

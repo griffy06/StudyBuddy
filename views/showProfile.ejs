@@ -72,7 +72,7 @@
 <div class="center">
     <% var temp = files.find(function (value) { return value._id.toString()===user.pic })%>
     <figure>
-    <img style="height: 250px; width: 250px; border-radius: 50%;border-style: solid; border-color: white" src="/main/image/<%=temp.filename%>" alt="profile pic">
+    <img style="height: 250px; width: 250px; border-radius: 50%;border-style: solid; border-color: white; padding: 4px" src="/main/image/<%=temp.filename%>" alt="profile pic">
     </figure>
 </div>
 <div class="login" style="margin-top: 4%">

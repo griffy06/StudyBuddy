@@ -5,6 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href='https://fonts.googleapis.com/css?family=Atma' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Basic' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/stylesheets/nothing.css' />
     <title><%=user.name%>: <%= title%></title>
@@ -21,7 +25,7 @@
             background: linear-gradient(180deg, #76777a 0%, #39393c 37%, #000108 100%) fixed;
         }
         .post{
-            opacity:90%;
+            opacity:100%;
             height: 100%;
         }
         .btn-circle{
@@ -32,6 +36,37 @@
         .center{
             margin: auto;
             text-align: center;
+        }
+        .Author {
+            display: flex;
+        }
+
+        .wrapper {
+            display: flex;
+            align: left;
+        }
+
+        .Name{
+            margin-left: 15px;
+        }
+        .ID {
+            margin-left: 0px;
+        }
+        .heading{
+            font-family: 'Aclonica';
+            font-size: x-large;
+        }
+        .blah{
+            font-family: 'Atma';
+            font-size: medium;
+        }
+        .thead{
+            font-family: 'Basic';
+            font-size: 45px;
+        }
+        .tlist{
+            font-family:'Cabin';
+            font-size: medium;
         }
     </style>
 
@@ -70,7 +105,7 @@
 <%- messages('message', locals) %>
 <div class="container bg-dark" style="opacity: 90%;border-style: solid; border-color: white">
     <br>
-    <h1 align="center" style="color: white;"><%= title%></h1>
+    <h1 class="thead" align="center" style="color: white;"><%= title%></h1>
     <br>
 </div>
     <% if(post==''){%>
@@ -141,11 +176,11 @@
                     <%}else{%>
                         <img style="height: 45px; width: 45px;border-radius: 50%" src="\images\profile.png" alt="image">
                     <%}%>
-                    <div class="wrapper">
+                    <div class="wrapper tlist">
                         <span class="Name">
                             <%= item.author%><br>
                             <span class="ID">
-                                <a href="/main/course/<%= item.course_id%>/view/<%= item.authorid%>/viewAuthor" style="font-size: small">@<%= item.authorid%></a>
+                                <a href="/main/course/<%= item.course_id%>/view/<%= item.authorid%>/viewAuthor">@<%= item.authorid%></a>
                             </span>
                         </span>
                     </div>
@@ -161,10 +196,17 @@
                 </div>
                 </p>-->
 
-                <span><h2 align="center">'<%=item.topic%>'</h2></span>
-                <p style="color: white" align="left">
+                <span class="heading" align="center"><%=item.topic%><br></span>
+                    <% if(item.tag.length!==1||item.tag[0]!=''){%>
+                        <% if(item.tag!=undefined &&item.tag!=null){%>
+                            <% item.tag.forEach(function(t){%>
+                                <%var randomColor = Math.floor(Math.random()*16777215).toString(16);%>
+                                <button disabled class="btn btn-sm" style="background-color: <%= "#"+randomColor%>; font-family: 'Segoe UI Semibold'; color: black"><%= t%></button>&nbsp&nbsp
+                    <%})}}%>
+                <p class="blah" style="color: white; margin-left: 72px; margin-right: 72px" align="justify">
+                    <br>
                     <%= item.content%><br>
-                    <br><br>
+                    <br>
                 </p>
 
                 <% item.fileField.forEach(function (file) {%>
@@ -187,29 +229,20 @@
                 <%})%>
                 <%}%>
                 <%})%>
-                <a href="/main/<%= item._id%>/like"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
                         <% if(user.posts_liked.indexOf(item._id)!==-1){%>
-                            <i class="fa fa-thumbs-up"></i>
+                            <i class="fa fa-thumbs-up"style="font-size: x-large"></i>
                         <%}else{%>
-                            <i class="fa fa-thumbs-o-up"></i>
+                            <i class="fa fa-thumbs-o-up"style="font-size: x-large"></i>
                         <%}%>
-                    </button></a>&nbsp<%= item.no_of_likes%>&nbsp &nbsp &nbsp
-                <a href="/main/<%= item._id%>/dislike"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
+                    &nbsp<%= item.no_of_likes%>&nbsp &nbsp &nbsp
                         <% if(user.posts_disliked.indexOf(item._id)===-1){%>
-                            <i class="fa fa-thumbs-o-down"></i>
+                            <i class="fa fa-thumbs-o-down" style="font-size: x-large"></i>
                         <%}else{%>
-                            <i class="fa fa-thumbs-down"></i>
+                            <i class="fa fa-thumbs-down"style="font-size: x-large"></i>
                         <%}%>
-                    </button></a>&nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
-                <a href="/main/<%= item._id%>/comments"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
-                        <i class="fa fa-comment"></i></button></a>&nbsp<%= item.no_of_comments%>&nbsp &nbsp &nbsp
-                <a href="/main/<%= item._id%>/bookmark"><button type="button" class="btn btn-primary btn-circle btn-group-sm">
-                        <% if(user.posts_bookmarked.indexOf(item._id)===-1){%>
-                            <i class="fa fa-star-o"></i>
-                        <%}else{%>
-                            <i class="fa fa-star"></i>
-                        <%}%>
-                    </button></a>
+                    &nbsp<%= item.no_of_dislikes%>&nbsp &nbsp &nbsp
+                <a href="/main/<%= item._id%>/comments" style="color: white;font-size: x-large">
+                        <i class="fa fa-comment"></i></a>&nbsp<%= item.no_of_comments%>&nbsp &nbsp &nbsp
           <!--  </li>-->
        <!-- </div>-->
         <br>

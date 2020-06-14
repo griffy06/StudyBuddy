@@ -69,7 +69,7 @@ router.get('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                                         User.find(function (err, users) {
                                             if(err) console.log(err);
                                             else
-                                                res.render('posts', {files: files,post: post, course:course, current_course:course1[0], user:req.user, users:users});
+                                                res.render('posts', {files: files,post: post, course:course, current_course:course1[0], user:req.user, users:users, purpose:'view'});
 
                                         })
                                         //return;
@@ -217,8 +217,8 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                     console.log('No such entry');
                     return;
                 } else {
+                    console.log(course1);
                     Course.find({sem_id:course1[0].sem_id},{},function(err2,course){
-                        //console.log(course);
                         if (err2) {
                             console.log('No such entry');
                             return;
@@ -229,16 +229,24 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                                 else{
                                     User.find(function (err, users) {
                                         if(err) console.log(err);
-                                        else
-                                            res.render('posts', {post: arrUnique, course:course, current_course:req.params.id, user:req.user, users:users, files:files});
+
+                                        else{
+                                            if(req.body.searchBy=='')
+                                            {
+                                                res.redirect('/main/course/'+req.params.id+'/view');
+                                            }
+
+                                            else
+                                            {
+                                                res.render('posts', {post: arrUnique, course:course, current_course:req.params.id, user:req.user, users:users, files:files, purpose:'search'});
+                                            }
+                                        }
+
                                     })
                                 }
 
 
                             })
-
-
-                          //  return;
                         }
                     });
                 }
@@ -345,8 +353,27 @@ router.post('/editProfile', ensureAuthenticated, function (req, res, next) {
                             }
                         });
                     })
+
                 }
             })
+
+        Comment.find({authorid:username},{},function(err,post){
+            console.log('this is'+post);
+            if(err){
+                return;
+            }
+            else{
+                post.forEach(function (item) {
+                    console.log(post);
+                    item.authorid= req.body.username;
+                    item.save(function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                })
+            }
+        })
     }
 
     if(req.body.password=='') {
@@ -454,7 +481,7 @@ router.post('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,
                     console.log(e);
                 }
                 req.flash('success','Changes saved!');
-                res.redirect('/main/profile/myposts/'+req.params.id+'/edit');
+                res.redirect('/main/profile/myposts/');
                 return;
             })
         }
@@ -741,9 +768,27 @@ router.get('/:id/AllPosts', ensureAuthenticated, function (req,res) {
 });
 router.get('/:id/comments', ensureAuthenticated, function (req,res) {
     Comment.find({post_id: req.params.id},{},function(err,comments){
-        //console.log(comments);
-        Post.find({_id:req.params.id},{},function(err,post){
-            res.render('comments',{courseid:post[0].course_id,postid:req.params.id,user:req.user,comments:comments});
+        Post.find({_id:req.params.id},{},function(err1,post){
+            if(err1){
+                console.log(err1)
+            }
+            else{
+
+                global.gfs.files.find().toArray(function (err, files) {
+                    if(err) console.log(err);
+                    else{
+                        User.find(function (err, users) {
+                            if(err) console.log(err);
+                            else
+                            {
+                                res.render('comments',{user:req.user,courseid:post[0].course_id,postid:req.params.id,user:req.user,comments:comments,files:files, users:users});
+                            }
+                        })
+
+                    }
+                })
+            }
+
         })
     })
 });

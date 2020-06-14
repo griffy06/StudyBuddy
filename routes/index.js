@@ -74,8 +74,6 @@ router.post('/register', function(req,res) {
         })}
         return res.render('register');
       }
-      // console.log('that is'+arr);
-
       var pic;
       if(req.file!==undefined) {
         pic = req.file.id;

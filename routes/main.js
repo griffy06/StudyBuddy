@@ -127,7 +127,7 @@ router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50),
         p.no_of_comments=0;
         p.topic = req.body.topic;
         p.content=req.body.content;
-        p.tag = req.body.tags.split(',');
+        p.tag = req.body.tags.toLowerCase().split(',');
         Course.find({course_id:req.params.id},{},function(err1,course1){
             if (err1) {
                 console.log('No such entry');
@@ -166,7 +166,7 @@ router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50),
 router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
     //console.log(req.body.searchBy);
     console.log('hello');
-    let tags = req.body.searchBy.split(',');
+    let tags = req.body.searchBy.toLowerCase().split(',');
     let arr=[];
     Post.find(function (err,post) {
         if(err) console.log(err);

@@ -27,12 +27,15 @@ input[type=radio]:checked ~ input[type=reset] {
     visibility: visible;
 }
 input[type=reset] {
-    background-color: #333632;
-    border: 5px;
-    border-radius: 3px;
+    background-color: transparent;
+    border: 2px;
+    border-radius: 50%;
+    border-style: solid;
     color: #fff;
     padding: 0.5em 0.75em;
-    bottom: 5%;
+    bottom: 2%;
+    height: 50px;
+    width: 50px;
     left: 50%;
     visibility: hidden;
     transform: translateX(-50%);
@@ -41,7 +44,7 @@ input[type=reset] {
     appearance: none;
 }
 input[type=reset]:hover, input[type=reset]:focus {
-    background-color: #44b8ee;
+    background-color: #1345f6;
 }
 input[type=reset]:active {
     background-color: #0572ba;

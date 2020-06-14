@@ -286,9 +286,9 @@
                                 <%}else if(file2.contentType=='video/mp4' || file2.contentType=='video/ogg' || file2.contentType=='video/webm'){%>
                                     <video height="400px" controls><source src="\main\video\<%=file2.filename%>" type="<%=file2.contentType%>"></video><br>
                                 <%}else if(file2.contentType==='application/pdf' || file2.contentType==='application/octet-stream' || file2.contentType==='text/plain' || file2.contentType==='application/x-zip-compressed'){%>
-                                    <a href="\main\document\<%=file2.filename%>"><%=file2.filename%></a><br>
+                                    <a href="\main\document\<%=file2.filename%>"><%=file2.metadata%></a><br>
                                 <%}else{%>
-                                    <%=file2.filename%>
+                                    <%=file2.metadata%>
                                 <%}%>
             <br><br>
                             <%}%>

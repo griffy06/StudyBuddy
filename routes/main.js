@@ -23,12 +23,13 @@ const storage = new GridFsStorage({
                 if (err) {
                     return reject(err);
                 }
-                const filename = file.originalname;
-                //const filename = buf.toString('hex') + path.extname(file.originalname);
+              //  const filename = file.originalname;
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const original = file.originalname;
                 const fileInfo = {
                     filename: filename,
                     bucketName: 'uploads',
-                  //  metadata: metadata?metadata:null
+                    metadata: original
                 };
                 resolve(fileInfo);
             });
@@ -1084,7 +1085,7 @@ router.post('/editProfile/updatepic', ensureAuthenticated, function (req,res) {
                     err: 'No file exists'
                 })
             }
-
+            console.log(file.originalname);
             //check if image
             if (file.contentType === 'image/jpeg' || file.contentType === 'image/jpg' || file.contentType === 'image/png') {
                 //read output to browser
@@ -1130,7 +1131,7 @@ router.post('/editProfile/updatepic', ensureAuthenticated, function (req,res) {
                     err: 'No file exists'
                 })
             }
-
+            //console.log(file.metadata);
             //check if image
             if (file.contentType === 'application/pdf' || file.contentType === 'application/octet-stream' || file.contentType === 'text/plain' || file.contentType === 'application/x-zip-compressed') {
                 //read output to browser
@@ -1138,7 +1139,7 @@ router.post('/editProfile/updatepic', ensureAuthenticated, function (req,res) {
                 readStream.pipe(res);
             } else {
                 return res.status(404).json({
-                    err: 'Not a video'
+                    err: 'Not a document'
                 })
             }
         })

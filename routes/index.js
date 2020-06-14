@@ -63,7 +63,15 @@ router.post('/register', function(req,res) {
       const email = req.body.email;
       const username = req.body.username;
       const password = req.body.password;
-      //const confirm = req.body.confirm;
+      const confirm = req.body.confirm;
+      let arr=[];
+      User.find({username:username},{},function(err,user){
+        user.forEach(function (item) {
+            arr.push(item);
+        })
+      })
+      console.log(arr);
+
       var pic;
       if(req.file!==undefined) {
         pic = req.file.id;
@@ -87,22 +95,31 @@ router.post('/register', function(req,res) {
               console.log(err);
             } else {
               newUser.password = hash;
-              newUser.save(function (err) {
-                if (err) {
-                  console.log(err);
-                } else {
-
-                  req.flash('success', 'Successfully registered!');
-                  res.redirect('/');
-                }
-              });
+              if(arr.length==1){
+                req.flash('danger', 'User Already Exists!');
+                res.redirect('/register');
+              }
+              else if(password.length<8){
+                req.flash('danger', 'Password must be minimum 8 characters.');
+                res.redirect('/register');
+              }
+              // else if(password!=confirm){
+              //   req.flash('danger', 'Passwords do not match.');
+              //   res.redirect('/');
+              // }
+              else{
+                newUser.save(function (err) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    req.flash('success', 'Successfully registered... Kindly Login!');
+                    res.redirect('/login');
+                  }
+                });
+              }
             }
           });
         });
-     /* } else {
-        req.flash('danger', 'Only images are allowed as file types!');
-        res.redirect('/register');
-      }*/
     }
   });
 });

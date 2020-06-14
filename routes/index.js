@@ -107,11 +107,19 @@ router.post('/register', function(req,res) {
               newUser.password = hash;
               if(arr.length==1){
                 req.flash('danger', 'User Already Exists!');
-                res.redirect('/register');
+                if (req.file!==undefined){
+                  gfs.remove({_id: req.file.id, root: 'uploads'}, function (err, gridStore) {
+                    if (err) console.log(err);
+                  })}
+                return res.redirect('/register');
               }
               else if(password.length<8){
                 req.flash('danger', 'Password must be minimum 8 characters.');
-                res.redirect('/register');
+                if (req.file!==undefined){
+                  gfs.remove({_id: req.file.id, root: 'uploads'}, function (err, gridStore) {
+                    if (err) console.log(err);
+                  })}
+                return res.redirect('/register');
               }
               else{
                 newUser.save(function (err) {

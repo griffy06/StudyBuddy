@@ -859,7 +859,27 @@ router.post('/profile/myposts/:id/edit/:fileid/delete', function (req,res) {
     })
 })
 
-
+router.post('/profile/myposts/:id/edit/addfiles', upload.array('files', 50), ensureAuthenticated, function (req,res) {
+    Post.find({_id:req.params.id}, function (err, post) {
+        if(err) console.log(err);
+        else
+        {
+            //console.log(req.files.size);
+            req.files.forEach(function (file) {
+                console.log("yo");
+                console.log(file.id);
+                post[0].fileField.push(file.id);
+            })
+            Post.update({_id:req.params.id},post[0],function (err) {
+                if(err) console.log(err);
+                else{
+                    req.flash('success','Files added!')
+                    res.redirect('/main/profile/myposts/'+req.params.id+'/edit');}
+                //res.redirect('/');
+            })
+        }
+    })
+})
 
 function ensureAuthenticated(req,res,next)
 {

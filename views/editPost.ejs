@@ -64,7 +64,7 @@
 
         <div class="form-group">
             <label for="content"><h6>Content</h6></label>
-            <textarea type="text" class="form-control" id="content" name="content"><%= post.content%></textarea>
+            <textarea type="text" rows="7" class="form-control" id="content" name="content"><%= post.content%></textarea>
         </div>
         <div class="form-group">
             <label for="tags"><h6>Tags</h6></label>
@@ -82,7 +82,7 @@
     <div align="center">
         <%post.fileField.forEach(function (filepost) {%>
             <%files.forEach(function (file) {%>
-                <%if(file._id.toString()===filepost._id.toString()){%>
+                <%if(file._id.toString()===filepost.toString()){%>
                <br> <form method="post" action="/main/profile/myposts/<%= post._id%>/edit/<%=file._id%>/delete">
                     <%=file.filename%>
                     <button type="submit" class="btn btn-danger" style="margin-left: 10%;">Remove file</button>
@@ -92,6 +92,13 @@
 
         <%})%>
         <br><br></div>
+    <form action="/main/profile/myposts/<%= post._id%>/edit/addfiles" method="post" enctype="multipart/form-data">
+    <div align="center">
+        <h5>Add new files:</h5><br>
+        <input type="file" name="files" multiple />
+        <button type="submit" class="btn btn-success" style="margin-left: 10%;">Add files</button>
+    </div>
+    </form><br><br>
     <form method="get" action="/main/profile/myposts">
         <div align="center">
         <button type="submit" class="btn btn-info">Go back to my posts!</button>

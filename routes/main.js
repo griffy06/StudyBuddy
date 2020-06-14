@@ -130,53 +130,15 @@ router.post('/course/:id/create', ensureAuthenticated, upload.array('files',50),
                         p.course_id=req.params.id;
                         p.sem_id=course1[0].sem_id;
                         req.files.forEach(function (fileobj) {
-                          //  console.log(fileobj);
-                         //   console.log('----------');
-                         //   console.log(fileobj.id);
                             p.fileField.push(fileobj.id);
                         })
-                      //  console.log('----------');
-                      //  console.log(p.fileField);
+
                         p.save(function(err2){
                             if(err2){
                                 console.log(err2);
                             }
                             else{
 
-                               // console.log(req.files);
-                              //  console.log('-----------------');
-                              //  metadata = p._id;
-                              /*  req.files.forEach(function(file){
-                                    global.gfs.files.find().toArray(function (err,files) {
-                                        if(err) console.log(err);
-                                        else
-                                        {
-                                            //console.log(files);
-                                            files.forEach(function (file2) {
-                                                console.log(file2);
-                                                if(file2.filename === file.filename)
-                                                {
-                                                    file2.metadata = metadata;
-                                                    file2.save(function (err) {
-                                                        if(err) console.log(err);
-                                                    });
-                                                }
-                                            })
-                                         //   res.render('posts', {files: files,post: post, course:course, current_course:req.params.id, user:req.user});
-                                         //   return;
-                                        }
-                                    })
-
-                                  /*  file.metadata = metadata;
-                                    console.log("what");
-                                    console.log(file.metadata);
-                                    file.save(function (err) {
-                                        if(err) console.log(err);
-                                    });
-                                })*/
-                             /*   console.log('-------------');
-                                console.log(p.fileField);
-                                console.log('-------------');*/
                                  req.flash('success', 'Post created successfully!');
                                  return res.redirect('/main/course/'+req.params.id+'/view');
                          }

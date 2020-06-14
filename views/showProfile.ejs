@@ -80,7 +80,19 @@
     </figure>
 
 </div>
+
 <div class="login" style="margin-top: 4%">
+    <%if(viewer=='me'){%>
+        <br><div align="center">
+        <form method="post" action="/main/editProfile/removepic">
+            <button type="submit" class="btn btn-danger" style="background-color: firebrick">Remove profile picture</button>
+        </form></div>
+        <br><div align="center">
+        <form method="post" action="/main/editProfile/updatepic" enctype="multipart/form-data">
+            <input type="file" name="pic">
+            <button type="submit" class="btn btn-info">Change profile picture</button>
+        </form></div><br>
+        <%}%>
     <form method="post" action="/main/editProfile">
         <% if(viewer=='me'){%>
         <label style="color:white">

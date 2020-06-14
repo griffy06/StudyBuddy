@@ -103,10 +103,6 @@ router.post('/register', function(req,res) {
                 req.flash('danger', 'Password must be minimum 8 characters.');
                 res.redirect('/register');
               }
-              // else if(password!=confirm){
-              //   req.flash('danger', 'Passwords do not match.');
-              //   res.redirect('/');
-              // }
               else{
                 newUser.save(function (err) {
                   if (err) {

@@ -75,12 +75,7 @@ router.post('/register', function(req,res) {
         return res.render('register');
       }
       let arr=[];
-      User.find({username:username},{},function(err,user){
-        user.forEach(function (item) {
-            arr.push(item);
-        })
-      })
-      console.log(arr);
+      // console.log('that is'+arr);
 
       var pic;
       if(req.file!==undefined) {

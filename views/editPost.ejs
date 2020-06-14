@@ -50,7 +50,7 @@
 <!--                <a class="nav-link" href="/main/profile">My Profile<span class="sr-only">(current)</span></a>-->
 <!--            </li>-->
                         <li class="nav-item">
-                            <a class="nav-link" href="/main/profile/myposts">Back<span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="/main/profile/myposts">Go back to my Posts<span class="sr-only">(current)</span></a>
                         </li>
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
@@ -101,20 +101,16 @@
                 <%}%>
             <%})%>
         <%})%>
-        <br><br></div>
+        <br></div>
+    <br>
     <form action="/main/profile/myposts/<%= post._id%>/edit/addfiles" method="post" enctype="multipart/form-data">
     <div align="center">
         <h5>Add new files:</h5><br>
         <input type="file" name="files" multiple />
         <button type="submit" class="btn btn-success" style="margin-left: 10%;">Add files</button>
     </div>
-    </form><br><br>
-    <form method="get" action="/main/profile/myposts">
-        <div align="center">
-        <button type="submit" class="btn btn-info">Go back to my posts!</button>
-        </div><br><br>
-     </form>
-
+    </form>
+<br>
 </div>
 <script src='/bower_components/jquery/dist/jquery.js'></script>
 <script src='/bower_components/bootstrap/dist/js/bootstrap.js'></script>

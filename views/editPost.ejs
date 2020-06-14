@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link href='https://fonts.googleapis.com/css?family=Basic' rel='stylesheet'>
     <title>Edit Post</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -29,7 +29,16 @@
             right:10px;
             bottom: 10px;
         }
-
+        .lhead
+        {
+            font-family: 'Basic';
+            font-size: 20px;
+        }
+        .lhead2
+        {
+            font-family: 'Basic';
+            font-size: 40px;
+        }
         </style>
 </head>
 <body>
@@ -62,7 +71,7 @@
 <%- messages('message', locals) %>
 <div class="container bg-dark" style="opacity: 90%;border-style: solid; border-color: white">
     <br>
-    <h1 align="center" style="color: white"><%= title%></h1>
+    <h1 align="center" class="lhead2" style="color: white"><%= title%></h1>
     <br>
 </div>
 
@@ -70,16 +79,16 @@
 <div class="container" style="color: white">
     <form method="post" action="/main/profile/myposts/<%= post._id%>/edit">
         <div class="form-group">
-            <label for="topic"><h6>Title</h6></label>
+            <label for="topic"><h6 class="lhead">Title</h6></label>
             <textarea type="text" class="form-control" id="topic" name="topic" ><%= post.topic%></textarea>
         </div>
 
         <div class="form-group">
-            <label for="content"><h6>Content</h6></label>
+            <label for="content"><h6 class="lhead">Content</h6></label>
             <textarea type="text" rows="7" class="form-control" id="content" name="content"><%= post.content%></textarea>
         </div>
         <div class="form-group">
-            <label for="tags"><h6>Tags</h6></label>
+            <label for="tags"><h6 class="lhead">Tags</h6></label>
             <textarea type="text" class="form-control" id="tags" name="tags" ><%= post.tag%></textarea>
         </div><br>
         <div align="center">
@@ -87,7 +96,7 @@
         </div>
     </form><br>
         <div align="center">
-            <h5>Make changes to the attached files:</h5>
+            <h5 class="lhead">Make changes to the attached files:</h5>
         <!--    <textarea type="" class="form-control" id="tags" name="tags" ><%= post.tag%></textarea>-->
         </div>
     <div align="center">
@@ -105,7 +114,7 @@
     <br>
     <form action="/main/profile/myposts/<%= post._id%>/edit/addfiles" method="post" enctype="multipart/form-data">
     <div align="center">
-        <h5>Add new files:</h5><br>
+        <h5 class="lhead">Add new files:</h5><br>
         <input type="file" name="files" multiple />
         <button type="submit" class="btn btn-success" style="margin-left: 10%;">Add files</button>
     </div>

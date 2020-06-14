@@ -1,8 +1,8 @@
-<div id="messages" style="text-align: center;">
+<div id="messages" style="text-align: center; z-index: 99; width:400px; position:fixed; top:2px; left: 450px">
     <% Object.keys(messages).forEach(function (type) { %>
 
             <% messages[type].forEach(function (message) { %>
-        <div class="alert alert-<%= type %>"><%= message %></div>
+        <div class="alert alert-<%= type %>" style="z-index: 99"><%= message %></div>
             <% }) %>
     <% }) %>
 </div>

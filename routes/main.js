@@ -231,14 +231,14 @@ router.post('/course/:id/view', ensureAuthenticated, function (req,res,next) {
                                         if(err) console.log(err);
 
                                         else{
-                                            if(req.body.searchBy=='')
+                                            if(req.body.searchBy==='')
                                             {
                                                 res.redirect('/main/course/'+req.params.id+'/view');
                                             }
 
                                             else
                                             {
-                                                res.render('posts', {post: arrUnique, course:course, current_course:req.params.id, user:req.user, users:users, files:files, purpose:'search'});
+                                                res.render('posts', {post: arrUnique, course:course, current_course:course1[0], user:req.user, users:users, files:files, purpose:'search'});
                                             }
                                         }
 
@@ -471,7 +471,7 @@ router.post('/profile/myposts/:id/edit', ensureAuthenticated, function (req,res,
     Post.findById(req.params.id,{},function(err,post){
         post.topic = req.body.topic;
         post.content=req.body.content;
-        post.tag=req.body.tags;
+        post.tag=req.body.tags.split(',');
         if(err){
             return;
         }
